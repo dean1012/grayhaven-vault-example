@@ -9,15 +9,6 @@ private SSH keys, credentials, or operational state.
 
 Do not encrypt files in this repository.
 
-## Branches
-
-Use the branch that matches the environment being documented:
-
-- `main`: production-facing examples and shared documentation.
-- `staging`: staging-facing examples.
-
-When a change applies to both environments, update both branches.
-
 ## Development Setup
 
 Install the validation tools used by CI:
@@ -33,8 +24,8 @@ npm install --global markdownlint-cli2
 Run the same validation commands used by CI:
 
 ```bash
-yamllint .
-markdownlint-cli2 '**/*.md'
+git ls-files '*.yml' '*.yaml' | xargs -r yamllint
+git ls-files '*.md' | xargs -r markdownlint-cli2
 ```
 
 Before committing changes, also check the current diff for whitespace errors:

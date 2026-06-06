@@ -24,8 +24,9 @@ code while preserving a documented interface between the repositories.
   convergence.
 - `config.yml` remains plaintext because it contains selectors and operational
   settings, not secrets.
-- Files under `vault/` must be encrypted with Ansible Vault in the real private
-  repository.
+- Files under `vault/` are intentionally unencrypted for demonstration
+  purposes. They should be encrypted with Ansible Vault before committing to a
+  private operational repository.
 
 This repository is not a general-purpose deployment template. Deploying similar
 automation for another organization requires review and adaptation.
@@ -235,6 +236,34 @@ htpasswd -nB username
 
 The `htpasswd` command is provided by the `httpd-tools` package on Red Hat
 distributions.
+
+## Generating API Keys
+
+DigitalOcean API keys should be tightly scoped to the access required by the
+automation that uses them.
+
+The `digitalocean_inventory_api_token` value should be scoped as follows:
+
+| Resource Type | Permissions |
+| ------------- | ----------- |
+| actions       | read        |
+| regions       | read        |
+| sizes         | read        |
+| domain        | read        |
+| droplet       | read        |
+| firewall      | read        |
+| image         | read        |
+| project       | read        |
+| snapshot      | read        |
+| ssh_key       | read        |
+| tag           | read        |
+| vpc           | read        |
+
+The `digitalocean_dns_api_token` value should be scoped as follows:
+
+| Resource Type | Permissions                         |
+| ------------- | ----------------------------------- |
+| domain        | create, read, update, delete        |
 
 ## Deploy Key Setup
 

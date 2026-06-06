@@ -1,0 +1,18 @@
+# Local environment
+.env
+.env.*
+
+# Editor files
+.vscode/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# Dependency/cache directories
+node_modules/
+.cache/
+.venv/
