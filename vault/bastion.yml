@@ -1,0 +1,15 @@
+---
+# Example plaintext only.
+# Real grayhaven-vault files under vault/ must be encrypted with Ansible Vault.
+
+ansible_control_private_key: |
+  -----BEGIN OPENSSH PRIVATE KEY-----
+  example
+  -----END OPENSSH PRIVATE KEY-----
+ansible_control_public_key: "ssh-ed25519 AAAAexample ansible@example"
+
+digitalocean_inventory_api_token: "dop_v1_example_inventory_token"
+
+discord_webhooks:
+  production: "https://discord.com/api/webhooks/example/production"
+  testing: "https://discord.com/api/webhooks/example/testing"

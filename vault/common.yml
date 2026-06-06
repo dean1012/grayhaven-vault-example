@@ -1,0 +1,24 @@
+---
+# Example plaintext only.
+# Real grayhaven-vault files under vault/ must be encrypted with Ansible Vault.
+
+root_password_hash: "$6$example-root-password-hash"
+restic_password: "example-restic-password"
+
+admins:
+  - username: jsmith
+    name: Jerry Dean Smith, Jr.
+    password_hash: "$6$example-admin-password-hash"
+    ssh_keys:
+      - "ssh-ed25519 AAAAexample admin@example"
+    sudo: true
+    state: present
+
+  - username: oldadmin
+    name: Old Admin
+    password_hash: "$6$example-old-admin-password-hash"
+    ssh_keys:
+      - "ssh-ed25519 AAAAexample-old oldadmin@example"
+    sudo: true
+    state: absent
+    home_mode: archive
