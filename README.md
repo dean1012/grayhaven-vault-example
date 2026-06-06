@@ -265,11 +265,9 @@ The `digitalocean_dns_api_token` value should be scoped as follows:
 | ------------- | ----------------------------------- |
 | domain        | create, read, update, delete        |
 
-## Deploy Key Setup
+## Deploy Key
 
-The real private repository is accessed by automation through a dedicated
-read-only GitHub deploy key. The deploy key should be unique to the private
-vault repository. Do not use a personal SSH key.
-
-The private key is handed to bastion hosts through OpenTofu during environment
-deployment. Each deployment environment should use a separate deploy key.
+Automation accesses the private vault repository through a read-only GitHub
+deploy key. The key is configured in GitHub for that repository and is supplied
+to deployed infrastructure through
+[`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu).
