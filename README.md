@@ -8,8 +8,9 @@ operational demonstration. They show how Grayhaven Systems LLC manages its own
 infrastructure, but they do not store client infrastructure, client credentials,
 private deployment data, private SSH keys, secrets, or operational state.
 
-This example repository intentionally contains fake plaintext sample data. Do
-not use the files in this repository as operational secrets.
+This example repository intentionally contains fake plaintext sample data. It
+should not be used operationally without configuration and appropriate
+encryption.
 
 ## Repository Purpose
 
