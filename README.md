@@ -1,11 +1,12 @@
 # Grayhaven Vault Example
 
-This repository is an example template for the private `grayhaven-vault`
+This repository documents the expected shape of the private `grayhaven-vault`
 repository used by Grayhaven Systems LLC infrastructure automation.
 
-The real `grayhaven-vault` repository must be created as a separate private
-GitHub repository. The real repository stores plaintext runtime selectors in
-`config.yml` and Ansible Vault encrypted secret files under `vault/`.
+The Grayhaven infrastructure repositories are public for transparency and
+operational demonstration. They show how Grayhaven Systems LLC manages its own
+infrastructure, but they do not store client infrastructure, client credentials,
+private deployment data, private SSH keys, secrets, or operational state.
 
 This example repository intentionally contains fake plaintext sample data. Do
 not use the files in this repository as operational secrets.
@@ -13,7 +14,7 @@ not use the files in this repository as operational secrets.
 ## Repository Purpose
 
 `grayhaven-vault` separates private operational data from public automation
-code.
+code while preserving a documented interface between the repositories.
 
 - `grayhaven-infra-opentofu` reads `config.yml` from a local checkout during
   OpenTofu planning and apply.
@@ -24,8 +25,10 @@ code.
 - Files under `vault/` must be encrypted with Ansible Vault in the real private
   repository.
 
-Infra repository:
-<https://github.com/dean1012/grayhaven-infra-opentofu>
+Infra repository: <https://github.com/dean1012/grayhaven-infra-opentofu>
+
+This repository is not a general-purpose deployment template. Deploying similar
+automation for another organization requires review and adaptation.
 
 ## Branch Model
 
@@ -201,40 +204,17 @@ Variables:
 - `dev_basic_auth_htpasswd_line`:
   - htpasswd line used for development-site HTTP basic authentication.
 
-## Creating The Private Repository
+## Vault Encryption
 
-1. Create a new private GitHub repository named `grayhaven-vault`.
-2. Copy this repository layout into the private repository.
-3. Replace all sample values with real values.
-4. Encrypt all files under `vault/` with Ansible Vault.
-5. Keep `config.yml` plaintext.
-6. Create both `main` and `staging` branches.
-7. Add a read-only GitHub deploy key for automation access.
+The real private repository keeps `config.yml` plaintext and encrypts all files
+under `vault/` with Ansible Vault before use.
 
-The private deploy key should be unique to `grayhaven-vault`. Do not use a
-personal SSH key.
+This example repository keeps `vault/` files in plaintext only so the expected
+variable names and data shapes can be inspected safely. Plaintext `vault/`
+files are unsafe for operational use.
 
-## Encrypting Vault Files
-
-Install Ansible locally, then encrypt each real secret file:
-
-```bash
-ansible-vault encrypt vault/common.yml
-ansible-vault encrypt vault/bastion.yml
-ansible-vault encrypt vault/web.yml
-```
-
-To edit an encrypted file:
-
-```bash
-ansible-vault edit vault/common.yml
-```
-
-Use a strong, randomly generated vault password. A shell-friendly example:
-
-```bash
-openssl rand -hex 48
-```
+Use a strong, randomly generated vault password. A shell-friendly generated
+password can be produced with `openssl rand -hex 48`.
 
 ## Generating Password Hashes
 
@@ -254,8 +234,9 @@ The `htpasswd` command is provided by the `httpd-tools` package on AlmaLinux.
 
 ## Deploy Key Setup
 
-Create a dedicated SSH keypair for repository access. Add the public key to the
-private `grayhaven-vault` repository as a read-only deploy key.
+The real private repository is accessed by automation through a dedicated
+read-only GitHub deploy key. The deploy key should be unique to the private
+vault repository. Do not use a personal SSH key.
 
 The private key is handed to bastion hosts through OpenTofu during environment
 deployment. Staging and production may use separate deploy keys.
@@ -265,8 +246,14 @@ deployment. Staging and production may use separate deploy keys.
 - Do not commit plaintext operational secrets.
 - Do not commit Ansible Vault passwords.
 - Do not use this example repository as the real vault.
+- Do not encrypt files in this example repository.
+- Keep all values generic and fake.
 - `config.yml` may be changed during normal operations.
 - Files under `vault/` must remain encrypted in the real private repository.
+- Real-looking sensitive data will not be merged.
+- Grayhaven Systems LLC is not responsible for third-party contributions that
+  expose personal data, credentials, keys, or other sensitive material. If real
+  information is submitted, rotate it immediately.
 - Local restic backups are encrypted, but local-only backups are not a
   substitute for disaster recovery.
 - Grayhaven Systems LLC performs a manual daily offsite transfer of local
