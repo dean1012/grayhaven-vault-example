@@ -7,6 +7,8 @@ repository used by Grayhaven Systems LLC infrastructure automation. It contains
 sample values only and must not contain real secrets, private deployment data,
 private SSH keys, credentials, or operational state.
 
+Do not encrypt files in this repository.
+
 ## Branches
 
 Use the branch that matches the environment being documented:
@@ -43,8 +45,16 @@ git diff --check
 
 ## Pull Requests
 
-Create a focused feature branch for each change and target the appropriate
-environment branch. Pull requests must be submitted before changes are merged.
+Create an issue and a focused feature branch for each change. Pull requests
+must be submitted before changes are merged.
+
+Target pull requests according to the environment affected:
+
+- Production-facing or shared changes target `main`.
+- Staging-facing changes target `staging`.
+- Changes that should apply to both environments should be merged into
+  `staging` first, then promoted through a pull request from `staging` to
+  `main`.
 
 Sign each commit so GitHub can verify its authorship:
 
@@ -52,12 +62,11 @@ Sign each commit so GitHub can verify its authorship:
 git commit -S -m "<message>"
 ```
 
-Pull requests are squash merged after CI passes and review conversations are
-resolved.
+CI runs on pushes and pull requests. Pull requests are squash merged after CI
+passes and review conversations are resolved.
 
 ## Safety Guidelines
 
-- Do not encrypt files in this repository.
 - Do not submit real credentials, private keys, tokens, hashes, passwords,
   customer data, deployment data, or operational state.
 - Keep all sample values generic and fake.

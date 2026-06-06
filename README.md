@@ -16,16 +16,15 @@ not use the files in this repository as operational secrets.
 `grayhaven-vault` separates private operational data from public automation
 code while preserving a documented interface between the repositories.
 
-- `grayhaven-infra-opentofu` reads `config.yml` from a local checkout during
-  OpenTofu planning and apply.
-- `grayhaven-config-ansible` pulls the private repository on the active control
-  bastion during convergence.
+- [`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu)
+  reads `config.yml` from a local checkout during OpenTofu planning and apply.
+- [`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible)
+  pulls the private repository on the active control bastion during
+  convergence.
 - `config.yml` remains plaintext because it contains selectors and operational
   settings, not secrets.
 - Files under `vault/` must be encrypted with Ansible Vault in the real private
   repository.
-
-Infra repository: <https://github.com/dean1012/grayhaven-infra-opentofu>
 
 This repository is not a general-purpose deployment template. Deploying similar
 automation for another organization requires review and adaptation.
@@ -45,10 +44,6 @@ vault/common.yml
 vault/bastion.yml
 vault/web.yml
 ```
-
-The `main` and `staging` branches may contain identical values at first. They
-are separate so environment-specific values can be introduced without changing
-the repository layout.
 
 ## Required Files
 
@@ -77,6 +72,8 @@ backup:
 Variables:
 
 - `certificate_environment`: `staging` or `production`.
+  - TLS mode is selected by the compute policy in
+    [`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu).
   - Host TLS mode:
     - `staging`: Certbot uses Let's Encrypt staging.
     - `production`: Certbot uses live Let's Encrypt.
@@ -89,14 +86,14 @@ Variables:
 - `backup.repositories.local.repository_path`:
   - Local restic repository path on each managed server.
 - `backup.repositories.local.homedir_archive_path`:
-  - Local path where removed admin home directories are archived.
+  - Local path where removed user home directories are archived.
 - `backup.schedule`:
   - Backup schedule. Only `daily` is supported at this time.
 - `backup.retention.keep_daily`:
   - Number of daily restic snapshots retained.
 - `backup.include`:
   - Optional list of paths to include in backups.
-  - If omitted, automation includes the homedir archive path, `/home`, and
+  - If omitted, automation includes `homedir_archive_path`, `/home`, and
     `/var/log`.
 - `backup.exclude`:
   - Optional list of additional paths to exclude from backups.
@@ -114,12 +111,12 @@ Sample shape:
 root_password_hash: "$6$example-root-password-hash"
 restic_password: "example-restic-password"
 
-admins:
-  - username: jsmith
-    name: Jerry Dean Smith, Jr.
+users:
+  - username: jdoe
+    full_name: Jane Doe
     password_hash: "$6$example-admin-password-hash"
     ssh_keys:
-      - "ssh-ed25519 AAAAexample admin@example"
+      - "ssh-ed25519 AAAAexample jdoe@example"
     sudo: true
     state: present
 ```
@@ -129,29 +126,29 @@ Variables:
 - `root_password_hash`:
   - Linux password hash for the root account.
 - `restic_password`:
-  - Restic repository password.
-- `admins`:
-  - List of managed administrative users.
-- `admins[].username`:
+  - Password used by restic to encrypt backups.
+- `users`:
+  - List of managed users.
+- `users[].username`:
   - Linux username.
-- `admins[].name`:
+- `users[].full_name`:
   - User comment/gecos field.
-- `admins[].password_hash`:
-  - Linux password hash for the admin account.
-- `admins[].ssh_keys`:
-  - List of public SSH keys installed for the admin account.
-- `admins[].sudo`:
-  - Boolean. When true, the user is granted administrative sudo access.
-- `admins[].state`:
+- `users[].password_hash`:
+  - Linux password hash for the user account.
+- `users[].ssh_keys`:
+  - List of public SSH keys installed for the user account.
+- `users[].sudo`:
+  - Boolean. When true, password sudo access is enabled for the user.
+- `users[].state`:
   - `present` creates and manages the user.
-  - `absent` removes the user. Extra fields are ignored for absent users.
-- `admins[].home_mode`:
-  - Optional for absent users.
-  - `archive` archives the home directory before removal. This is the default.
-  - `delete` removes the home directory without archiving.
-
-Homedir archives are compressed tar archives. They are not encrypted by the
-archive process. Restic repositories are encrypted by restic.
+  - `absent` removes the user. Requires `username` to be defined. See
+    `home_mode`.
+- `users[].home_mode`:
+  - May be optionally specified when `state` is set to `absent`.
+  - `archive` archives and compresses the user's home directory before user
+    deletion. This is the default.
+  - `delete` removes the user's home directory alongside user deletion.
+    Warning: this results in data loss.
 
 ### `vault/bastion.yml`
 
@@ -202,7 +199,8 @@ Variables:
 - `digitalocean_dns_api_token`:
   - DigitalOcean token used by Certbot DNS-01 automation in host TLS mode.
 - `dev_basic_auth_htpasswd_line`:
-  - htpasswd line used for development-site HTTP basic authentication.
+  - htpasswd line used for development-site HTTP basic authentication. This
+    value is shared across all hosted domains.
 
 ## Vault Encryption
 
@@ -214,11 +212,15 @@ variable names and data shapes can be inspected safely. Plaintext `vault/`
 files are unsafe for operational use.
 
 Use a strong, randomly generated vault password. A shell-friendly generated
-password can be produced with `openssl rand -hex 48`.
+password can be produced with:
+
+```bash
+openssl rand -hex 48
+```
 
 ## Generating Password Hashes
 
-Generate Linux password hashes for root and admin users:
+Generate Linux password hashes for user accounts by using:
 
 ```bash
 openssl passwd -6
@@ -230,7 +232,8 @@ Generate an htpasswd line for development HTTP basic authentication:
 htpasswd -nB username
 ```
 
-The `htpasswd` command is provided by the `httpd-tools` package on AlmaLinux.
+The `htpasswd` command is provided by the `httpd-tools` package on Red Hat
+distributions.
 
 ## Deploy Key Setup
 
@@ -239,22 +242,4 @@ read-only GitHub deploy key. The deploy key should be unique to the private
 vault repository. Do not use a personal SSH key.
 
 The private key is handed to bastion hosts through OpenTofu during environment
-deployment. Staging and production may use separate deploy keys.
-
-## Operational Notes
-
-- Do not commit plaintext operational secrets.
-- Do not commit Ansible Vault passwords.
-- Do not use this example repository as the real vault.
-- Do not encrypt files in this example repository.
-- Keep all values generic and fake.
-- `config.yml` may be changed during normal operations.
-- Files under `vault/` must remain encrypted in the real private repository.
-- Real-looking sensitive data will not be merged.
-- Grayhaven Systems LLC is not responsible for third-party contributions that
-  expose personal data, credentials, keys, or other sensitive material. If real
-  information is submitted, rotate it immediately.
-- Local restic backups are encrypted, but local-only backups are not a
-  substitute for disaster recovery.
-- Grayhaven Systems LLC performs a manual daily offsite transfer of local
-  backup data.
+deployment. Each deployment environment should use a separate deploy key.
