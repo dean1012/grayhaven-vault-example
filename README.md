@@ -28,7 +28,8 @@ encryption.
 code while preserving a documented interface between the repositories.
 
 - [`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu)
-  reads `config.yml` from a local checkout during OpenTofu planning and apply.
+  reads `config.yml` from a workspace-selected Git ref in a local checkout
+  during OpenTofu planning and apply.
 - [`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible)
   pulls the private repository on the active control bastion during
   convergence.
@@ -49,6 +50,15 @@ The private repository uses branches to represent environments:
 
 - `main`: production values.
 - `staging`: staging values.
+
+[`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu)
+reads `config.yml` from the appropriate Git ref:
+
+- staging workspace: `staging:config.yml`
+- production workspace: `main:config.yml`
+
+The local checkout branch does not need to match the OpenTofu workspace, but
+the required refs must be fetched locally.
 
 Each branch contains the same file layout:
 
