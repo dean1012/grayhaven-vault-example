@@ -12,6 +12,16 @@ This example repository intentionally contains fake plaintext sample data. It
 should not be used operationally without configuration and appropriate
 encryption.
 
+## Table of Contents
+
+- [Repository Purpose](#repository-purpose)
+- [Branch Model](#branch-model)
+- [Required Files](#required-files)
+- [Vault Encryption](#vault-encryption)
+- [Generating Password Hashes](#generating-password-hashes)
+- [Generating API Keys](#generating-api-keys)
+- [Deploy Key](#deploy-key)
+
 ## Repository Purpose
 
 `grayhaven-vault` separates private operational data from public automation
@@ -31,6 +41,8 @@ code while preserving a documented interface between the repositories.
 This repository is not a general-purpose deployment template. Deploying similar
 automation for another organization requires review and adaptation.
 
+[Back to top](#grayhaven-vault-example)
+
 ## Branch Model
 
 The private repository uses branches to represent environments:
@@ -46,6 +58,8 @@ vault/common.yml
 vault/bastion.yml
 vault/web.yml
 ```
+
+[Back to top](#grayhaven-vault-example)
 
 ## Required Files
 
@@ -102,6 +116,8 @@ Variables:
 
 Only `backup.repositories.local` is supported at this time.
 
+[Back to top](#grayhaven-vault-example)
+
 ### `vault/common.yml`
 
 `vault/common.yml` stores secrets and private values shared across managed
@@ -152,6 +168,8 @@ Variables:
   - `delete` removes the user's home directory alongside user deletion.
     Warning: this results in data loss.
 
+[Back to top](#grayhaven-vault-example)
+
 ### `vault/bastion.yml`
 
 `vault/bastion.yml` stores secrets used by bastion/control-node automation.
@@ -185,6 +203,8 @@ Variables:
 - `discord_webhooks.testing`:
   - Testing Discord notification webhook URL.
 
+[Back to top](#grayhaven-vault-example)
+
 ### `vault/web.yml`
 
 `vault/web.yml` stores web-hosting secrets.
@@ -204,14 +224,16 @@ Variables:
   - htpasswd line used for development-site HTTP basic authentication. This
     value is shared across all hosted domains.
 
+[Back to top](#grayhaven-vault-example)
+
 ## Vault Encryption
 
 The real private repository keeps `config.yml` plaintext and encrypts all files
 under `vault/` with Ansible Vault before use.
 
 This example repository keeps `vault/` files in plaintext only so the expected
-variable names and data shapes can be inspected safely. Plaintext `vault/`
-files are unsafe for operational use.
+variable names and data shapes can be inspected safely. The sample values are
+fake, intentionally generic, and unsafe for operational use.
 
 Use a strong, randomly generated vault password. A shell-friendly generated
 password can be produced with:
@@ -219,6 +241,8 @@ password can be produced with:
 ```bash
 openssl rand -hex 48
 ```
+
+[Back to top](#grayhaven-vault-example)
 
 ## Generating Password Hashes
 
@@ -236,6 +260,8 @@ htpasswd -nB username
 
 The `htpasswd` command is provided by the `httpd-tools` package on Red Hat
 distributions.
+
+[Back to top](#grayhaven-vault-example)
 
 ## Generating API Keys
 
@@ -265,9 +291,13 @@ The `digitalocean_dns_api_token` value should be scoped as follows:
 | ------------- | ----------------------------------- |
 | domain        | create, read, update, delete        |
 
+[Back to top](#grayhaven-vault-example)
+
 ## Deploy Key
 
 Automation accesses the private vault repository through a read-only GitHub
 deploy key. The key is configured in GitHub for that repository and is supplied
 to deployed infrastructure through
 [`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu).
+
+[Back to top](#grayhaven-vault-example)
