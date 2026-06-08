@@ -57,6 +57,10 @@ reads `config.yml` from the appropriate Git ref:
 - staging workspace: `staging:config.yml`
 - production workspace: `main:config.yml`
 
+[`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible)
+checks out the same environment ref on the active control bastion and reads
+the matching `config.yml` and `vault/*.yml` files during convergence.
+
 The local checkout branch does not need to match the OpenTofu workspace, but
 the required refs must be fetched locally.
 
@@ -223,16 +227,48 @@ Sample shape:
 
 ```yaml
 digitalocean_dns_api_token: "dop_v1_example_dns_token"
-dev_basic_auth_htpasswd_line: "developer:$2y$05$example"
+
+hosted_domains:
+  - domain: grayhavensystems.com
+    static_site: grayhavensystems.com
+    dev:
+      auth_realm: Grayhaven Systems LLC Development Environment
+      htpasswd_entries:
+        - "developer:$2y$05$example-grayhaven"
+
+  - domain: example.com
+    dev:
+      htpasswd_entries:
+        - "developer:$2y$05$example-generic"
 ```
 
 Variables:
 
 - `digitalocean_dns_api_token`:
   - DigitalOcean token used by Certbot DNS-01 automation in host TLS mode.
-- `dev_basic_auth_htpasswd_line`:
-  - htpasswd line used for development-site HTTP basic authentication. This
-    value is shared across all hosted domains.
+- `hosted_domains`:
+  - List of domains served by
+    [`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible).
+- `hosted_domains[].domain`:
+  - Apex domain name. Staging derives `staging.<domain>`,
+    `www.staging.<domain>`, and `dev.staging.<domain>`. Production derives
+    `<domain>`, `www.<domain>`, and `dev.<domain>`.
+- `hosted_domains[].static_site`:
+  - Optional source directory under `files/static-sites/` in
+    [`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible).
+    Omit this value to render the generic placeholder site.
+- `hosted_domains[].dev.auth_realm`:
+  - Optional HTTP basic-auth realm for the development vhost. If omitted,
+    Ansible uses `<domain> Development Environment`.
+- `hosted_domains[].dev.htpasswd_entries`:
+  - Full htpasswd file entries for the development vhost. These entries are
+    credential material and belong in encrypted vault files in the real private
+    repository.
+
+When adding a new hosted domain, also add matching DNS policy in
+[`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu).
+The baseline workspace owns shared DNS and mail records; staging and
+production own only environment web records.
 
 [Back to top](#grayhaven-vault-example)
 
