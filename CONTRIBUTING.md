@@ -9,6 +9,13 @@ private SSH keys, credentials, or operational state.
 
 Do not encrypt files in this repository.
 
+## Table of Contents
+
+- [Development Setup](#development-setup)
+- [Validation](#validation)
+- [Pull Requests](#pull-requests)
+- [Safety Guidelines](#safety-guidelines)
+
 ## Development Setup
 
 Install the validation tools used by CI:
@@ -18,6 +25,8 @@ python3 -m pip install --upgrade pip
 python3 -m pip install yamllint
 npm install --global markdownlint-cli2
 ```
+
+[Back to top](#contributing)
 
 ## Validation
 
@@ -33,6 +42,8 @@ Before committing changes, also check the current diff for whitespace errors:
 ```bash
 git diff --check
 ```
+
+[Back to top](#contributing)
 
 ## Pull Requests
 
@@ -56,6 +67,8 @@ git commit -S -m "<message>"
 CI runs on pushes and pull requests. Pull requests are squash merged after CI
 passes and review conversations are resolved.
 
+[Back to top](#contributing)
+
 ## Safety Guidelines
 
 - Do not submit real credentials, private keys, tokens, hashes, passwords,
@@ -66,3 +79,5 @@ passes and review conversations are resolved.
 
 Grayhaven Systems LLC is not responsible for third-party contributions that
 expose personal data, credentials, keys, or other sensitive material.
+
+[Back to top](#contributing)
