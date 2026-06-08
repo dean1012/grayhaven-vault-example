@@ -3,4 +3,23 @@
 # Real grayhaven-vault files under vault/ must be encrypted with Ansible Vault.
 
 digitalocean_dns_api_token: "dop_v1_example_dns_token"
-dev_basic_auth_htpasswd_line: "developer:$2y$05$example"
+
+hosted_domains:
+  - domain: grayhavensystems.com
+    static_site: grayhavensystems.com
+    dev:
+      auth_realm: Grayhaven Systems LLC Development Environment
+      htpasswd_entries:
+        - "developer:$2y$05$example-grayhaven"
+
+  - domain: jerry-smith.net
+    static_site: jerry-smith.net
+    dev:
+      auth_realm: jerry-smith.net Development Environment
+      htpasswd_entries:
+        - "developer:$2y$05$example-jerry"
+
+  - domain: example.com
+    dev:
+      htpasswd_entries:
+        - "developer:$2y$05$example-generic"
