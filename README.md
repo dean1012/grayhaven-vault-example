@@ -65,15 +65,6 @@ the matching `config.yml` and `vault/*.yml` files during convergence.
 The local checkout branch does not need to match the OpenTofu workspace, but
 the required refs must be fetched locally.
 
-Public example changes should be validated on `staging` before promotion to
-`main`. Because both branches are long-lived and usually receive squash-merged
-pull requests, their histories can diverge even when the file content is nearly
-identical. If a direct `staging` to `main` pull request reports conflicts,
-create a fresh branch from `main`, cherry-pick or reapply the already-approved
-staging change, and open that branch against `main`. This preserves the
-staging-first review path without asking GitHub to merge unrelated branch
-history.
-
 Each branch contains the same file layout:
 
 ```text
