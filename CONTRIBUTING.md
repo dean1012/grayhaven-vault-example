@@ -50,6 +50,10 @@ git diff --check
 Create an issue and a focused feature branch for each change. Pull requests
 must be submitted before changes are merged.
 
+Reference the related issue in each commit and include
+`Closes #<issue-number>` in the pull request description when the pull request
+should close an issue after merging.
+
 Target pull requests according to the environment affected:
 
 - Production-facing or shared changes target `main`.
