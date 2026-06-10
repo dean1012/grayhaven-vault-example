@@ -54,9 +54,15 @@ Target pull requests according to the environment affected:
 
 - Production-facing or shared changes target `main`.
 - Staging-facing changes target `staging`.
-- Changes that should apply to both environments should be merged into
-  `staging` first, then promoted through a pull request from `staging` to
-  `main`.
+- Changes that should apply to both environments should be validated through a
+  pull request into `staging` first. To promote the same approved content to
+  `main`, create a fresh branch from `main`, cherry-pick or reapply the staging
+  change, and open that branch against `main`.
+
+Do not rely on a direct `staging` to `main` pull request for promotion. The
+long-lived branches are squash merged and can have intentionally different
+history, so a direct branch-to-branch pull request may report conflicts even
+when the file content is already correct.
 
 Sign each commit so GitHub can verify its authorship:
 
