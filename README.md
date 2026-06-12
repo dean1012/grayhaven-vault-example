@@ -254,6 +254,11 @@ Variables:
   - Apex domain name. Staging derives `staging.<domain>`,
     `www.staging.<domain>`, and `dev.staging.<domain>`. Production derives
     `<domain>`, `www.<domain>`, and `dev.<domain>`.
+  - Each hosted domain should have matching DNS policy in
+    [`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu)
+    with `environment_web: true`. If `environment_web` is omitted, it defaults
+    to false and staging/production create no computed web DNS records for the
+    domain.
 - `hosted_domains[].static_site`:
   - Optional source directory under `files/static-sites/` in
     [`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible).
@@ -268,8 +273,14 @@ Variables:
 
 When adding a new hosted domain, also add matching DNS policy in
 [`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu).
-The baseline workspace owns shared DNS and mail records; staging and
-production own only environment web records.
+The baseline workspace owns shared DNS and mail records. Staging and
+production own only the computed web DNS records for domains marked with
+`environment_web: true`: `staging.<domain>`, `www.staging.<domain>`, and
+`dev.staging.<domain>` in staging; `<domain>`, `www.<domain>`, and
+`dev.<domain>` in production. Keep `hosted_domains` and `environment_web: true`
+aligned so
+[`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible)
+can converge the matching vhosts.
 
 [Back to top](#grayhaven-vault-example)
 
