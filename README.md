@@ -22,6 +22,7 @@ encryption.
 - [Generating Password Hashes](#generating-password-hashes)
 - [Generating API Keys](#generating-api-keys)
 - [Deploy Key](#deploy-key)
+- [License](#license)
 
 ## Repository Purpose
 
@@ -390,5 +391,11 @@ Automation accesses the private vault repository through a read-only GitHub
 deploy key. The key is configured in GitHub for that repository and is supplied
 to deployed infrastructure through
 [`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu).
+
+[Back to top](#grayhaven-vault-example)
+
+## License
+
+[MIT](LICENSE)
 
 [Back to top](#grayhaven-vault-example)
