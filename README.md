@@ -75,6 +75,10 @@ vault/bastion.yml
 vault/web.yml
 ```
 
+Each environment branch must carry a complete configured copy of these files.
+Infrastructure automation does not provide fallback defaults for missing
+`config.yml` values or missing vault files.
+
 [Back to top](#grayhaven-vault-example)
 
 ## Required Files
