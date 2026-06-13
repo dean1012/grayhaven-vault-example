@@ -43,8 +43,8 @@ chmod 0755 .githooks/pre-commit
 git config core.hooksPath .githooks
 ```
 
-Edit `config.yml` and the files under `vault/` for production and staging as
-shown below. File formats are documented in detail in the
+Edit `config.yml`, `firewall.yml`, and the files under `vault/` for production
+and staging as shown below. File formats are documented in detail in the
 [`grayhaven-vault-example`](https://github.com/dean1012/grayhaven-vault-example)
 repository.
 
@@ -54,8 +54,8 @@ Configure production first so the initial commit creates the `main` branch:
 git branch -M main
 ```
 
-Edit `config.yml` and the files under `vault/` using the generated production
-values from above where applicable.
+Edit `config.yml`, `firewall.yml`, and the files under `vault/` using the
+generated production values from above where applicable.
 
 Encrypt the `vault/*.yml` files with the production Ansible Vault passphrase
 generated above, then commit and push `main` to the new private GitHub
@@ -78,8 +78,8 @@ git switch -c staging
 ansible-vault decrypt vault/*.yml
 ```
 
-Edit `config.yml` and the files under `vault/` using the generated staging
-values from above where applicable.
+Edit `config.yml`, `firewall.yml`, and the files under `vault/` using the
+generated staging values from above where applicable.
 
 Encrypt the `vault/*.yml` files with the staging Ansible Vault passphrase
 generated above, then commit and push `staging` to the new private GitHub
