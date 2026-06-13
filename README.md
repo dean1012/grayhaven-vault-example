@@ -35,8 +35,8 @@ code while preserving a documented interface between the repositories.
 - [`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible)
   pulls the private repository on the active control bastion during
   convergence.
-- `config.yml` remains plaintext because it contains selectors and operational
-  settings, not secrets.
+- `config.yml` and `firewall.yml` remain plaintext because they contain
+  selectors and operational settings, not secrets.
 - Files under `vault/` are intentionally unencrypted for demonstration
   purposes. They should be encrypted with Ansible Vault before committing to a
   private operational repository.
@@ -54,14 +54,15 @@ The private repository uses branches to represent environments:
 - `staging`: staging values.
 
 [`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu)
-reads `config.yml` from the appropriate Git ref:
+reads `config.yml` and `firewall.yml` from the appropriate Git ref:
 
 - staging workspace: `staging:config.yml`
 - production workspace: `main:config.yml`
 
 [`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible)
 checks out the same environment ref on the active control bastion and reads
-the matching `config.yml` and `vault/*.yml` files during convergence.
+the matching `config.yml`, `firewall.yml`, and `vault/*.yml` files during
+convergence.
 
 The local checkout branch does not need to match the OpenTofu workspace, but
 the required refs must be fetched locally.
@@ -70,6 +71,7 @@ Each branch contains the same file layout:
 
 ```text
 config.yml
+firewall.yml
 vault/common.yml
 vault/bastion.yml
 vault/web.yml
@@ -135,6 +137,65 @@ Variables:
   - Optional list of additional paths to exclude from backups.
 
 Only `backup.repositories.local` is supported at this time.
+
+[Back to top](#grayhaven-vault-example)
+
+### `firewall.yml`
+
+`firewall.yml` is plaintext and is read by both OpenTofu and Ansible.
+
+```yaml
+firewalls:
+  bastion:
+    inbound:
+      - protocol: tcp
+        port_range: "22"
+        source_addresses:
+          - 0.0.0.0/0
+    outbound:
+      - protocol: tcp
+        port_range: "22"
+        destination_tags:
+          - web
+  web:
+    inbound:
+      - protocol: tcp
+        port_range: "22"
+        source_tags:
+          - bastion
+    outbound:
+      - protocol: tcp
+        port_range: "443"
+        destination_addresses:
+          - 0.0.0.0/0
+```
+
+Variables:
+
+- `firewalls`:
+  - Map of supported firewall role policies.
+- `firewalls.bastion`:
+  - Bastion cloud firewall and host firewalld policy.
+- `firewalls.web`:
+  - Web cloud firewall and host firewalld policy.
+- `inbound`:
+  - List of inbound firewall rules.
+- `outbound`:
+  - List of outbound firewall rules.
+- `protocol`:
+  - Network protocol.
+- `port_range`:
+  - Port or port range.
+- `source_addresses`:
+  - Optional list of source CIDR blocks for inbound rules.
+- `source_tags`:
+  - Optional list of source tag aliases for inbound rules.
+- `destination_addresses`:
+  - Optional list of destination CIDR blocks for outbound rules.
+- `destination_tags`:
+  - Optional list of destination tag aliases for outbound rules.
+
+Supported tag aliases are `bastion` and `web`.
 
 [Back to top](#grayhaven-vault-example)
 
@@ -293,8 +354,8 @@ can converge the matching vhosts.
 
 ## Vault Encryption
 
-The real private repository keeps `config.yml` plaintext and encrypts all files
-under `vault/` with Ansible Vault before use.
+The real private repository keeps `config.yml` and `firewall.yml` plaintext and
+encrypts all files under `vault/` with Ansible Vault before use.
 
 This example repository keeps `vault/` files in plaintext only so the expected
 variable names and data shapes can be inspected safely. The sample values are
