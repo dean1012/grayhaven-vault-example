@@ -5,14 +5,25 @@ repository from this example repository.
 
 ## Table of Contents
 
-- [Set Up the Vault Repository](#set-up-the-vault-repository)
+- [Create the Private grayhaven-vault Repository on GitHub](#create-the-private-grayhaven-vault-repository-on-github)
+- [Create the Local grayhaven-vault Repository on Your Workstation](#create-the-local-grayhaven-vault-repository-on-your-workstation)
+- [Install the Vault Safety Hook](#install-the-vault-safety-hook)
+- [Configure the Production Environment](#configure-the-production-environment)
+- [Configure the Staging Environment](#configure-the-staging-environment)
+- [Add GitHub Origin to Your Local Repository](#add-github-origin-to-your-local-repository)
+- [Push to the GitHub Repository](#push-to-the-github-repository)
+- [Add the Deployment SSH Keypair to grayhaven-vault on GitHub](#add-the-deployment-ssh-keypair-to-grayhaven-vault-on-github)
 
-## Set Up the Vault Repository
+## Create the Private grayhaven-vault Repository on GitHub
 
 Create a new private repository named `grayhaven-vault` on GitHub. In the
 private repository settings, disable optional features that are not used for
 vault operations: Wiki, issues, sponsorships, discussions, projects, and pull
 request features when GitHub exposes a control for them.
+
+[Back to top](#setup)
+
+## Create the Local grayhaven-vault Repository on Your Workstation
 
 Use
 [`grayhaven-vault-example`](https://github.com/dean1012/grayhaven-vault-example)
@@ -32,6 +43,10 @@ example repository history, then initialize a fresh repository:
 git init
 ```
 
+[Back to top](#setup)
+
+## Install the Vault Safety Hook
+
 Install the provided pre-commit hook before the first commit. This hook rejects
 commits when required vault files are missing or staged without Ansible Vault
 encryption.
@@ -43,9 +58,16 @@ chmod 0755 .githooks/pre-commit
 git config core.hooksPath .githooks
 ```
 
+[Back to top](#setup)
+
+## Configure the Production Environment
+
 Edit `config.yml`, `firewall.yml`, and the files under `vault/` for production
-and staging as shown below. File formats are documented in [File
-Schema](schema.md).
+using the production values generated during
+[`grayhaven-infra-opentofu` setup](https://github.com/dean1012/grayhaven-infra-opentofu/blob/main/docs/setup.md)
+where applicable.
+
+File formats are documented in [File Schema](schema.md).
 
 Configure production first so the initial commit creates the `main` branch:
 
@@ -53,23 +75,19 @@ Configure production first so the initial commit creates the `main` branch:
 git branch -M main
 ```
 
-Edit `config.yml`, `firewall.yml`, and the files under `vault/` using the
-production values generated during
-[`grayhaven-infra-opentofu` setup](https://github.com/dean1012/grayhaven-infra-opentofu/blob/main/docs/setup.md)
-where applicable.
-
 Encrypt the `vault/*.yml` files with the production Ansible Vault passphrase
-generated during infrastructure setup, then commit and push `main` to the new
-private GitHub repository.
+generated during infrastructure setup, then commit `main`.
 
 ```bash
 yamllint .
 ansible-vault encrypt vault/*.yml
 git add .
 git commit -S -m "Initialize production vault data"
-git remote add origin git@github.com:dean1012/grayhaven-vault.git
-git push -u origin main
 ```
+
+[Back to top](#setup)
+
+## Configure the Staging Environment
 
 Create the staging branch from the initialized main branch, then decrypt the
 copied production vault files with the production Ansible Vault passphrase:
@@ -83,16 +101,39 @@ Edit `config.yml`, `firewall.yml`, and the files under `vault/` using the
 staging values generated during infrastructure setup where applicable.
 
 Encrypt the `vault/*.yml` files with the staging Ansible Vault passphrase
-generated during infrastructure setup, then commit and push `staging` to the
-new private GitHub repository.
+generated during infrastructure setup, then commit `staging`.
 
 ```bash
 yamllint .
 ansible-vault encrypt vault/*.yml
 git add .
 git commit -S -m "Initialize staging vault data"
+```
+
+[Back to top](#setup)
+
+## Add GitHub Origin to Your Local Repository
+
+Add the new private GitHub repository as the local repository origin:
+
+```bash
+git remote add origin git@github.com:dean1012/grayhaven-vault.git
+```
+
+[Back to top](#setup)
+
+## Push to the GitHub Repository
+
+Push both initialized environment branches:
+
+```bash
+git push -u origin main
 git push -u origin staging
 ```
+
+[Back to top](#setup)
+
+## Add the Deployment SSH Keypair to grayhaven-vault on GitHub
 
 Add the deployment public key generated during infrastructure setup as a
 read-only deploy key on the `grayhaven-vault` repository through GitHub's
