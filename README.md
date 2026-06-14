@@ -36,7 +36,7 @@ automation for another organization requires review and adaptation.
 ## Documentation
 
 - [Setup](docs/setup.md)
-- [Architecture](docs/architecture.md)
+- [Vault Architecture](docs/vault-architecture.md)
 - [File Schema](docs/schema.md)
 - [Operations](docs/operations.md)
 
