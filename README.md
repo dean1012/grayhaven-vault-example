@@ -1,12 +1,13 @@
-# Grayhaven Vault Example
+# grayhaven-vault-example
 
 This repository documents the expected shape of the private `grayhaven-vault`
 repository used by Grayhaven Systems LLC infrastructure automation.
 
-The Grayhaven infrastructure repositories are public for transparency and
-operational demonstration. They show how Grayhaven Systems LLC manages its own
-infrastructure, but they do not store client infrastructure, client credentials,
-private deployment data, private SSH keys, secrets, or operational state.
+The Grayhaven Systems LLC infrastructure repositories are public for
+transparency and operational demonstration. They show how Grayhaven Systems LLC
+manages its own infrastructure, but they do not store client infrastructure,
+client credentials, private deployment data, private SSH keys, secrets, or
+operational state.
 
 This example repository intentionally contains fake plaintext sample data. It
 should not be used operationally without configuration and appropriate
