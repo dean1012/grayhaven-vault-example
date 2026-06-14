@@ -48,7 +48,6 @@ backup:
   retention:
     keep_daily: 7
   include:
-    - /var/backups/deleted-homedir-archives
     - /home
     - /var/log
   exclude: []
@@ -63,8 +62,8 @@ Supported keys:
   home directory archives.
 - `backup.schedule`: backup schedule. Only `daily` is supported at this time.
 - `backup.retention.keep_daily`: number of daily restic snapshots retained.
-- `backup.include`: optional list of paths to include in backups. When set,
-  include every desired path, including the configured homedir archive path.
+- `backup.include`: optional list of additional paths to include in backups.
+  The configured homedir archive path is always included automatically.
 - `backup.exclude`: optional list of additional paths to exclude from backups.
 
 Only `backup.repositories.local` is supported at this time.

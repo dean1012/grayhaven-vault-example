@@ -44,12 +44,13 @@ npm install --global markdownlint-cli2
 
 Target pull requests according to the environment affected:
 
-- Production-facing or shared changes target `main`.
 - Staging-facing changes target `staging`.
+- Production-only changes target `main`.
 - Changes that should apply to both environments should be validated through a
-  pull request into `staging` first. To promote the same approved content to
-  `main`, create a fresh branch from `main`, cherry-pick or reapply the staging
-  change, and open that branch against `main`.
+  pull request from a branch based on `staging` into `staging` first. To promote
+  the same approved content to `main`, create a fresh branch from `main`,
+  cherry-pick or reapply the staging change, and open that branch against
+  `main`.
 
 Do not rely on a direct `staging` to `main` pull request for promotion. The
 long-lived branches are squash merged and can have intentionally different
