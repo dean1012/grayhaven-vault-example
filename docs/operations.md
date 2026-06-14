@@ -56,7 +56,7 @@ In the real private repository, rotate each environment branch deliberately:
 
 If the OpenTofu state encryption passphrase is also being rotated, follow the
 state passphrase rotation procedure documented in
-[`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu)
+[`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu/blob/main/docs/operations.md#opentofu-state-encryption-passphrase-rotation)
 so OpenTofu writes state with the new state encryption passphrase. Updating the
 Ansible Vault password variables alone does not re-encrypt OpenTofu state.
 

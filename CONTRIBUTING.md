@@ -26,6 +26,7 @@ Do not encrypt files in this repository.
 Install the validation tools used by CI:
 
 ```bash
+sudo dnf install ShellCheck
 python3 -m pip install --upgrade pip
 python3 -m pip install yamllint
 npm install --global markdownlint-cli2
@@ -63,6 +64,7 @@ Validate formatting and syntax from the repository root:
 
 ```bash
 git ls-files '*.yml' '*.yaml' | xargs -r yamllint
+shellcheck templates/pre-commit
 git ls-files '*.md' | xargs -r markdownlint-cli2
 ```
 
