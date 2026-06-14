@@ -53,7 +53,7 @@ encryption.
 
 ```bash
 mkdir -p .githooks
-cp ../grayhaven-infra-opentofu/templates/vault/pre-commit .githooks/pre-commit
+cp templates/pre-commit .githooks/pre-commit
 chmod 0755 .githooks/pre-commit
 git config core.hooksPath .githooks
 ```
