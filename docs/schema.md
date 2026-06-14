@@ -213,7 +213,7 @@ Supported keys:
 - `hosted_domains[].domain`: apex domain name.
 - `hosted_domains[].static_site`: optional source directory under
   `files/static-sites/` in
-  [`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible).
+  `grayhaven-config-ansible`.
   Omit this value to render the generic placeholder site.
 - `hosted_domains[].dev.auth_realm`: optional HTTP basic-auth realm for the
   development vhost.
