@@ -45,7 +45,7 @@ In the real private repository, rotate each environment branch deliberately:
 
 4. Lint the plaintext files and confirm the vault files remain encrypted before
    committing.
-5. Update the matching infra environment variable:
+5. Update the matching `grayhaven-infra-opentofu` environment variable:
    `TF_VAR_grayhaven_vault_password_staging` for staging or
    `TF_VAR_grayhaven_vault_password_prod` for production.
 6. In
