@@ -1,4 +1,4 @@
-# Architecture
+# Vault Architecture
 
 This document describes how the private `grayhaven-vault` repository is used by
 Grayhaven Systems LLC infrastructure automation. File formats are documented in
@@ -25,7 +25,7 @@ In the real private repository:
 This public example repository keeps all sample files plaintext so the expected
 shape can be inspected safely. All sample values are fake.
 
-[Back to top](#architecture)
+[Back to top](#vault-architecture)
 
 ## Branch Model
 
@@ -37,7 +37,7 @@ The private repository uses branches to represent environments:
 The local checkout branch does not need to match the active OpenTofu workspace,
 but the required refs must be fetched locally.
 
-[Back to top](#architecture)
+[Back to top](#vault-architecture)
 
 ## Automation Consumers
 
@@ -50,4 +50,4 @@ checks out the same environment ref on the active control bastion during
 convergence and reads the matching `config.yml`, `firewall.yml`, and
 `vault/*.yml` files.
 
-[Back to top](#architecture)
+[Back to top](#vault-architecture)
