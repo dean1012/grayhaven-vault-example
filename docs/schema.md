@@ -86,6 +86,10 @@ firewalls:
           - 0.0.0.0/0
     outbound:
       - protocol: tcp
+        port_range: "80"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
         port_range: "443"
         destination_addresses:
           - 0.0.0.0/0
@@ -102,6 +106,10 @@ firewalls:
           - 0.0.0.0/0
     outbound:
       - protocol: tcp
+        port_range: "80"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
         port_range: "443"
         destination_addresses:
           - 0.0.0.0/0
@@ -112,9 +120,13 @@ Supported top-level keys:
 - `firewalls.bastion`: bastion firewall policy.
 - `firewalls.web`: web firewall policy.
 
-The web inbound firewall policy must include TCP `80` and TCP `443` rules.
+The `firewalls.web.inbound` policy must include TCP `80` and TCP `443` rules.
 OpenTofu validates this shape before applying the TLS-mode-specific effective
 cloud firewall.
+
+It is strongly recommended that each role allow outbound HTTP, HTTPS, DNS, and
+NTP traffic unless there is a deliberate reason to narrow egress further. This
+normally means TCP `80`, TCP `443`, TCP/UDP `53`, and UDP `123`.
 
 Supported rule keys:
 
