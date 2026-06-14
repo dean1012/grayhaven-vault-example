@@ -54,11 +54,13 @@ git branch -M main
 ```
 
 Edit `config.yml`, `firewall.yml`, and the files under `vault/` using the
-generated production values from above where applicable.
+production values generated during
+[`grayhaven-infra-opentofu` setup](https://github.com/dean1012/grayhaven-infra-opentofu/blob/main/docs/setup.md)
+where applicable.
 
 Encrypt the `vault/*.yml` files with the production Ansible Vault passphrase
-generated above, then commit and push `main` to the new private GitHub
-repository.
+generated during infrastructure setup, then commit and push `main` to the new
+private GitHub repository.
 
 ```bash
 yamllint .
@@ -78,11 +80,11 @@ ansible-vault decrypt vault/*.yml
 ```
 
 Edit `config.yml`, `firewall.yml`, and the files under `vault/` using the
-generated staging values from above where applicable.
+staging values generated during infrastructure setup where applicable.
 
 Encrypt the `vault/*.yml` files with the staging Ansible Vault passphrase
-generated above, then commit and push `staging` to the new private GitHub
-repository.
+generated during infrastructure setup, then commit and push `staging` to the
+new private GitHub repository.
 
 ```bash
 yamllint .
@@ -92,7 +94,8 @@ git commit -S -m "Initialize staging vault data"
 git push -u origin staging
 ```
 
-Add the deploy public key generated earlier as a read-only deploy key on the
-`grayhaven-vault` repository through GitHub's website.
+Add the deployment public key generated during infrastructure setup as a
+read-only deploy key on the `grayhaven-vault` repository through GitHub's
+website.
 
 [Back to top](#setup)
