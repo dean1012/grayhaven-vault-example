@@ -13,7 +13,6 @@ This document describes the expected files and data shapes for the private
 - [`vault/common.yml`](#vaultcommonyml)
 - [`vault/bastion.yml`](#vaultbastionyml)
 - [`vault/web.yml`](#vaultwebyml)
-- [Hosted Domain DNS Coordination](#hosted-domain-dns-coordination)
 
 ## Required Files
 
@@ -222,9 +221,7 @@ Supported keys:
 `hosted_domains[].dev.htpasswd_entries` values are credential material and
 belong in encrypted vault files in the real private repository.
 
-[Back to top](#file-schema)
-
-## Hosted Domain DNS Coordination
+### Hosted Domain DNS Coordination
 
 When adding a hosted domain, also add matching DNS policy in
 [`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu).
