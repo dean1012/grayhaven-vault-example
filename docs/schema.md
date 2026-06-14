@@ -225,8 +225,11 @@ belong in encrypted vault files in the real private repository.
 
 ### Hosted Domain DNS Coordination
 
-When adding a hosted domain, also add matching DNS policy in
-[`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu).
+When adding a hosted domain, also add matching
+[environment DNS policy](https://github.com/dean1012/grayhaven-infra-opentofu/blob/main/docs/policy.md#environment-dns-policy)
+in the
+[grayhaven-infra-opentofu](https://github.com/dean1012/grayhaven-infra-opentofu)
+repository.
 
 For hosted web domains, set both `environment.apex: true` and
 `environment.web_aliases: true` in the matching environment DNS policy.
