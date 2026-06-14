@@ -1,6 +1,10 @@
 # Contributing
 
-Thank you for your interest in improving `grayhaven-vault-example`.
+This document is intended for Grayhaven Systems LLC employees and assumes that
+this repository has been initialized and configured appropriately.
+
+If you are not a Grayhaven Systems LLC employee, we still welcome your support
+and contribution.
 
 This repository documents the expected shape of the private `grayhaven-vault`
 repository used by Grayhaven Systems LLC infrastructure automation. It contains
@@ -12,7 +16,8 @@ Do not encrypt files in this repository.
 ## Table of Contents
 
 - [Development Setup](#development-setup)
-- [Validation](#validation)
+- [Workflow](#workflow)
+- [Local Validation](#local-validation)
 - [Pull Requests](#pull-requests)
 - [Safety Guidelines](#safety-guidelines)
 
@@ -28,9 +33,33 @@ npm install --global markdownlint-cli2
 
 [Back to top](#contributing)
 
-## Validation
+## Workflow
 
-Run the same validation commands used by CI:
+1. Create a GitHub issue.
+2. Create a focused feature branch for the issue.
+3. Sign all commits and reference the issue number.
+4. Validate changes locally.
+5. Create a pull request for code review.
+
+Target pull requests according to the environment affected:
+
+- Production-facing or shared changes target `main`.
+- Staging-facing changes target `staging`.
+- Changes that should apply to both environments should be validated through a
+  pull request into `staging` first. To promote the same approved content to
+  `main`, create a fresh branch from `main`, cherry-pick or reapply the staging
+  change, and open that branch against `main`.
+
+Do not rely on a direct `staging` to `main` pull request for promotion. The
+long-lived branches are squash merged and can have intentionally different
+history, so a direct branch-to-branch pull request may report conflicts even
+when the file content is already correct.
+
+[Back to top](#contributing)
+
+## Local Validation
+
+Validate formatting and syntax from the repository root:
 
 ```bash
 git ls-files '*.yml' '*.yaml' | xargs -r yamllint
@@ -47,35 +76,13 @@ git diff --check
 
 ## Pull Requests
 
-Create an issue and a focused feature branch for each change. Pull requests
-must be submitted before changes are merged.
+Pull requests must meet all of these requirements to be merged:
 
-Reference the related issue in each commit and include
-`Closes #<issue-number>` in the pull request description when the pull request
-should close an issue after merging.
-
-Target pull requests according to the environment affected:
-
-- Production-facing or shared changes target `main`.
-- Staging-facing changes target `staging`.
-- Changes that should apply to both environments should be validated through a
-  pull request into `staging` first. To promote the same approved content to
-  `main`, create a fresh branch from `main`, cherry-pick or reapply the staging
-  change, and open that branch against `main`.
-
-Do not rely on a direct `staging` to `main` pull request for promotion. The
-long-lived branches are squash merged and can have intentionally different
-history, so a direct branch-to-branch pull request may report conflicts even
-when the file content is already correct.
-
-Sign each commit so GitHub can verify its authorship:
-
-```bash
-git commit -S -m "<message>"
-```
-
-CI runs on pushes and pull requests. Pull requests are squash merged after CI
-passes and review conversations are resolved.
+- Reference or close a GitHub issue as appropriate.
+- Contain signed commits.
+- Have no open review conversations.
+- Pass all CI checks.
+- Document all changes appropriately.
 
 [Back to top](#contributing)
 

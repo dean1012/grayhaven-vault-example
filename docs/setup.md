@@ -44,9 +44,8 @@ git config core.hooksPath .githooks
 ```
 
 Edit `config.yml`, `firewall.yml`, and the files under `vault/` for production
-and staging as shown below. File formats are documented in detail in the
-[`grayhaven-vault-example`](https://github.com/dean1012/grayhaven-vault-example)
-repository.
+and staging as shown below. File formats are documented in [File
+Schema](schema.md).
 
 Configure production first so the initial commit creates the `main` branch:
 
