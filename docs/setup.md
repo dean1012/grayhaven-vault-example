@@ -63,9 +63,11 @@ git config core.hooksPath .githooks
 ## Configure the Production Environment
 
 Edit `config.yml`, `firewall.yml`, and the files under `vault/` for production
-using the production values generated during
-[`grayhaven-infra-opentofu` setup](https://github.com/dean1012/grayhaven-infra-opentofu/blob/main/docs/setup.md)
-where applicable.
+using the production values generated during the
+[setup process](https://github.com/dean1012/grayhaven-infra-opentofu/blob/main/docs/setup.md)
+in the
+[`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu)
+repository where applicable.
 
 File formats are documented in [File Schema](schema.md).
 
