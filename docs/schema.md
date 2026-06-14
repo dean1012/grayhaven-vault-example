@@ -65,6 +65,8 @@ Supported keys:
 - `backup.include`: optional list of additional paths to include in backups.
   The configured homedir archive path is always included automatically.
 - `backup.exclude`: optional list of additional paths to exclude from backups.
+  Excludes can override automatically included paths, including the configured
+  homedir archive path.
 
 Only `backup.repositories.local` is supported at this time.
 
