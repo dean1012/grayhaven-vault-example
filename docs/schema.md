@@ -111,9 +111,15 @@ Supported rule keys:
 - `protocol`: network protocol.
 - `port_range`: DigitalOcean/firewalld port range.
 - `source_addresses`: optional inbound source CIDR list.
-- `source_tags`: optional inbound DigitalOcean source tag list.
+- `source_tags`: optional inbound role alias list. Supported aliases are
+  `bastion` and `web`.
 - `destination_addresses`: optional outbound destination CIDR list.
-- `destination_tags`: optional outbound DigitalOcean destination tag list.
+- `destination_tags`: optional outbound role alias list. Supported aliases are
+  `bastion` and `web`.
+
+OpenTofu maps role aliases to the appropriate DigitalOcean cloud firewall tags.
+Ansible firewalld policy currently interprets inbound `source_tags: bastion` to
+allow SSH from bastions to managed hosts.
 
 [Back to top](#file-schema)
 
