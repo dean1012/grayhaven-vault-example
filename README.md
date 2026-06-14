@@ -1,4 +1,4 @@
-# grayhaven-vault-example
+# Grayhaven Systems LLC Vault (Example)
 
 This repository documents the expected shape of the private `grayhaven-vault`
 repository used by Grayhaven Systems LLC infrastructure automation.
@@ -31,7 +31,7 @@ code while preserving a documented interface between these repositories:
 This repository is not a general-purpose deployment template. Deploying similar
 automation for another organization requires review and adaptation.
 
-[Back to top](#grayhaven-vault-example)
+[Back to top](#grayhaven-systems-llc-vault-example)
 
 ## Documentation
 
@@ -40,17 +40,17 @@ automation for another organization requires review and adaptation.
 - [File Schema](docs/schema.md)
 - [Operations](docs/operations.md)
 
-[Back to top](#grayhaven-vault-example)
+[Back to top](#grayhaven-systems-llc-vault-example)
 
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for validation commands and contribution
 guidelines.
 
-[Back to top](#grayhaven-vault-example)
+[Back to top](#grayhaven-systems-llc-vault-example)
 
 ## License
 
 [MIT](LICENSE)
 
-[Back to top](#grayhaven-vault-example)
+[Back to top](#grayhaven-systems-llc-vault-example)
