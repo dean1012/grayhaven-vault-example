@@ -123,15 +123,10 @@ The `digitalocean_inventory_api_token` value should be scoped as follows:
 | actions       | read        |
 | regions       | read        |
 | sizes         | read        |
-| domain        | read        |
 | droplet       | read        |
-| firewall      | read        |
 | image         | read        |
-| project       | read        |
-| snapshot      | read        |
-| ssh_key       | read        |
 | tag           | read        |
-| vpc           | read        |
+| snapshot      | read        |
 
 The `digitalocean_dns_api_token` value should be scoped as follows:
 
