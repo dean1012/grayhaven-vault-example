@@ -11,7 +11,6 @@ backup:
   retention:
     keep_daily: 7
   include:
-    - /var/backups/deleted-homedir-archives
     - /home
     - /var/log
   exclude: []
