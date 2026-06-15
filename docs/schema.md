@@ -48,7 +48,6 @@ backup:
   retention:
     keep_daily: 7
   include:
-    - /var/backups/deleted-homedir-archives
     - /home
     - /var/log
   exclude: []
@@ -63,9 +62,11 @@ Supported keys:
   home directory archives.
 - `backup.schedule`: backup schedule. Only `daily` is supported at this time.
 - `backup.retention.keep_daily`: number of daily restic snapshots retained.
-- `backup.include`: optional list of paths to include in backups. When set,
-  include every desired path, including the configured homedir archive path.
+- `backup.include`: optional list of additional paths to include in backups.
+  The configured homedir archive path is always included automatically.
 - `backup.exclude`: optional list of additional paths to exclude from backups.
+  Excludes can override automatically included paths, including the configured
+  homedir archive path.
 
 Only `backup.repositories.local` is supported at this time.
 
@@ -85,6 +86,10 @@ firewalls:
           - 0.0.0.0/0
     outbound:
       - protocol: tcp
+        port_range: "80"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
         port_range: "443"
         destination_addresses:
           - 0.0.0.0/0
@@ -95,7 +100,15 @@ firewalls:
         port_range: "80"
         source_addresses:
           - 0.0.0.0/0
+      - protocol: tcp
+        port_range: "443"
+        source_addresses:
+          - 0.0.0.0/0
     outbound:
+      - protocol: tcp
+        port_range: "80"
+        destination_addresses:
+          - 0.0.0.0/0
       - protocol: tcp
         port_range: "443"
         destination_addresses:
@@ -106,6 +119,14 @@ Supported top-level keys:
 
 - `firewalls.bastion`: bastion firewall policy.
 - `firewalls.web`: web firewall policy.
+
+The `firewalls.web.inbound` policy must include TCP `80` and TCP `443` rules.
+OpenTofu validates this shape before applying the TLS-mode-specific effective
+cloud firewall.
+
+It is strongly recommended that each role allow outbound HTTP, HTTPS, DNS, and
+NTP traffic unless there is a deliberate reason to narrow egress further. This
+normally means TCP `80`, TCP `443`, TCP/UDP `53`, and UDP `123`.
 
 Supported rule keys:
 
