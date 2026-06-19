@@ -93,13 +93,13 @@ token as `grafana_cloud.alerting.api_token` in `vault/common.yml`.
 
 The token needs these scopes:
 
-| Scope | Purpose |
-| ----- | ------- |
-| Alerting:Write via Provisioning API | Manage Ansible-owned alert rules. |
-| Data sources:Reader | Resolve the Prometheus datasource UID. |
-| Folders:Reader | Resolve the alert-rule folder UID. |
+| Scope |
+| ----- |
+| Alerting:Write via Provisioning API |
+| Data sources:Reader |
+| Folders:Reader |
 
-Ansible manages only alert rules labeled `configured_by=ansible`. Manual alert
+Ansible only manages alert rules labeled `configured_by=ansible`. Manual alert
 rules should not use that label.
 
 [Back to top](#grafana-cloud-setup)

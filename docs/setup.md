@@ -1,7 +1,7 @@
 # Setup
 
-This document describes how to initialize a private `grayhaven-vault`
-repository from this example repository.
+This document describes how to initialize `grayhaven-vault` from this example
+repository.
 
 ## Table of Contents
 
@@ -27,7 +27,7 @@ request features when GitHub exposes a control for them.
 
 Use
 [`grayhaven-vault-example`](https://github.com/dean1012/grayhaven-vault-example)
-as the documented starting shape for the private vault repository.
+as the documented starting shape for `grayhaven-vault`.
 
 Example setup flow:
 

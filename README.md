@@ -1,7 +1,7 @@
 # Grayhaven Systems LLC Vault (Example)
 
-This repository documents the expected shape of the private `grayhaven-vault`
-repository used by Grayhaven Systems LLC infrastructure automation.
+This repository documents the expected shape of `grayhaven-vault` as used by
+Grayhaven Systems LLC infrastructure automation.
 
 The Grayhaven Systems LLC infrastructure repositories are public for
 transparency and operational demonstration. They show how Grayhaven Systems LLC

@@ -1,6 +1,6 @@
 # Operations
 
-This document describes private `grayhaven-vault` maintenance procedures.
+This document describes `grayhaven-vault` maintenance procedures.
 Repository initialization is documented in [Setup](setup.md), and file formats
 are documented in [File Schema](schema.md).
 
@@ -107,7 +107,7 @@ it defaults to false.
 
 This repository includes `files/tmux-workspaces/jdoe.tmux` as a sanitized
 example. Real workspace files can contain private operator preferences and
-belong in the private vault repository.
+belong in `grayhaven-vault`.
 
 The
 [operator tmux architecture](https://github.com/dean1012/grayhaven-config-ansible/blob/main/docs/operator-tmux-architecture.md)
@@ -180,8 +180,8 @@ The `digitalocean_dns_api_token` value should be scoped as follows:
 
 ## Deploy Key
 
-Automation accesses the private vault repository through a read-only GitHub
-deploy key. The key is configured in GitHub for that repository and is supplied
+Automation accesses `grayhaven-vault` through a read-only GitHub deploy key.
+The key is configured in GitHub for that repository and is supplied
 to deployed infrastructure through
 [`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu).
 
