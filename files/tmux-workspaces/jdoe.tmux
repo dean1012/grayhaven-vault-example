@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Example operator tmux workspace.
 # Real workspace files may contain private operator preferences and should live
-# only in `grayhaven-vault`.
+# only in grayhaven-vault.
 
 session_name="${GRAYHAVEN_TMUX_SESSION_NAME:-Grayhaven Systems LLC}"
 
