@@ -5,7 +5,7 @@ repository.
 
 ## Table of Contents
 
-- [Create the Private grayhaven-vault Repository on GitHub](#create-the-private-grayhaven-vault-repository-on-github)
+- [Create the grayhaven-vault Repository on GitHub](#create-the-grayhaven-vault-repository-on-github)
 - [Create the Local grayhaven-vault Repository on Your Workstation](#create-the-local-grayhaven-vault-repository-on-your-workstation)
 - [Install the Vault Safety Hook](#install-the-vault-safety-hook)
 - [Configure the Production Environment](#configure-the-production-environment)
@@ -14,7 +14,7 @@ repository.
 - [Push to the GitHub Repository](#push-to-the-github-repository)
 - [Add the Deployment SSH Keypair to grayhaven-vault on GitHub](#add-the-deployment-ssh-keypair-to-grayhaven-vault-on-github)
 
-## Create the Private grayhaven-vault Repository on GitHub
+## Create the grayhaven-vault Repository on GitHub
 
 Create a new private repository named `grayhaven-vault` on GitHub. In the
 private repository settings, disable optional features that are not used for
