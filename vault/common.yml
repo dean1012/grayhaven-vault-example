@@ -12,6 +12,8 @@ users:
     ssh_keys:
       - "ssh-ed25519 AAAAexample jdoe@example"
     sudo: true
+    tmux_auto_attach: true
+    tmux_workspace: jdoe.tmux
     state: present
 
   - username: oldadmin

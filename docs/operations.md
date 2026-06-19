@@ -9,6 +9,7 @@ are documented in [File Schema](schema.md).
 - [Vault Encryption](#vault-encryption)
 - [Vault Password Rotation](#vault-password-rotation)
 - [Managing Users](#managing-users)
+- [Managing Operator Tmux Workspaces](#managing-operator-tmux-workspaces)
 - [Generating Password Hashes](#generating-password-hashes)
 - [Generating API Keys](#generating-api-keys)
 - [Deploy Key](#deploy-key)
@@ -89,6 +90,30 @@ Supported user keys:
 
 Homedir archives are not encrypted by the archive process. They are included in
 the encrypted local restic backup set by default.
+
+[Back to top](#operations)
+
+## Managing Operator Tmux Workspaces
+
+Operator tmux workspaces are optional and apply only to managed users with
+`sudo: true`. Store workspace files under `files/tmux-workspaces/`, then set
+the user's `tmux_workspace` value in `vault/common.yml` to the workspace
+filename.
+
+To automatically attach an administrator to tmux when they connect to bastion,
+set `tmux_auto_attach: true` for that user. If `tmux_auto_attach` is omitted,
+it defaults to false.
+
+This repository includes `files/tmux-workspaces/jdoe.tmux` as a sanitized
+example. Real workspace files can contain private operator preferences and
+belong in the private vault repository.
+
+The
+[operator tmux architecture](https://github.com/dean1012/grayhaven-config-ansible/blob/main/docs/operator-tmux-architecture.md)
+documentation in
+[grayhaven-config-ansible](https://github.com/dean1012/grayhaven-config-ansible)
+explains how `gtmux` loads workspace files and how to capture an interactive
+tmux layout.
 
 [Back to top](#operations)
 

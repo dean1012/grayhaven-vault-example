@@ -65,7 +65,7 @@ Validate formatting and syntax from the repository root:
 
 ```bash
 git ls-files '*.yml' '*.yaml' | xargs -r yamllint
-shellcheck templates/pre-commit
+shellcheck templates/pre-commit files/tmux-workspaces/jdoe.tmux
 git ls-files '*.md' | xargs -r markdownlint-cli2
 ```
 
