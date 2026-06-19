@@ -44,6 +44,11 @@ backup:
     local:
       repository_path: /var/backups/restic
       homedir_archive_path: /var/backups/deleted-homedir-archives
+    remote:
+      provider: gcs
+      project_id: grayhaven
+      location: US
+      storage_class: STANDARD
   schedule: daily
   retention:
     keep_daily: 7
@@ -54,8 +59,8 @@ backup:
 
 observability:
   grafana_cloud:
-    enabled: false
-    logs_enabled: false
+    enabled: true
+    logs_enabled: true
 ```
 
 Supported keys:

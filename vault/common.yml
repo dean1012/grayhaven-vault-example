@@ -6,6 +6,15 @@ root_password_hash: "$6$example-root-password-hash"
 
 restic:
   encryption_password: "example-restic-password"
+  remotes:
+    gcs:
+      credentials_json: |
+        {
+          "type": "service_account",
+          "project_id": "grayhaven",
+          "client_email": "restic@example.iam.gserviceaccount.com",
+          "private_key": "example-private-key"
+        }
 
 grafana_cloud:
   stack_url: "https://example.grafana.net"
