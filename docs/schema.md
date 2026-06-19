@@ -44,6 +44,11 @@ backup:
     local:
       repository_path: /var/backups/restic
       homedir_archive_path: /var/backups/deleted-homedir-archives
+    remote:
+      provider: gcs
+      project_id: grayhaven
+      location: US
+      storage_class: STANDARD
   schedule: daily
   retention:
     keep_daily: 7
@@ -51,6 +56,11 @@ backup:
     - /home
     - /var/log
   exclude: []
+
+observability:
+  grafana_cloud:
+    enabled: false
+    logs_enabled: false
 ```
 
 Supported keys:
@@ -60,6 +70,15 @@ Supported keys:
 - `backup.repositories.local.repository_path`: local restic repository path.
 - `backup.repositories.local.homedir_archive_path`: local path for removed user
   home directory archives.
+- `backup.repositories.remote`: optional remote restic repository settings.
+  Only Google Cloud Storage is supported at this time.
+- `backup.repositories.remote.provider`: remote repository provider. The
+  supported value is `gcs`.
+- `backup.repositories.remote.project_id`: Google Cloud project ID.
+- `backup.repositories.remote.location`: optional Google Cloud Storage bucket
+  location. Defaults to `US`.
+- `backup.repositories.remote.storage_class`: optional Google Cloud Storage
+  bucket storage class. Defaults to `STANDARD`.
 - `backup.schedule`: backup schedule. Only `daily` is supported at this time.
 - `backup.retention.keep_daily`: number of daily restic snapshots retained.
 - `backup.include`: optional list of additional paths to include in backups.
@@ -67,8 +86,49 @@ Supported keys:
 - `backup.exclude`: optional list of additional paths to exclude from backups.
   Excludes can override automatically included paths, including the configured
   homedir archive path.
+- `observability.grafana_cloud.enabled`: optional boolean. When true in
+  production, enables Grafana Cloud metrics and managed alert-rule automation.
+  Defaults to false.
+- `observability.grafana_cloud.logs_enabled`: optional boolean. When true and
+  Grafana Cloud observability is enabled, enables Grafana Cloud log shipping.
+  Defaults to false.
 
-Only `backup.repositories.local` is supported at this time.
+### Remote Backup Repository
+
+Remote restic repositories are optional. When enabled, Ansible creates one
+Google Cloud Storage bucket per managed host before configuring restic. Bucket
+names use the short hostname with `-restic` appended.
+
+```yaml
+backup:
+  repositories:
+    local:
+      repository_path: /var/backups/restic
+      homedir_archive_path: /var/backups/deleted-homedir-archives
+    remote:
+      provider: gcs
+      project_id: grayhaven
+      location: US
+      storage_class: STANDARD
+```
+
+Remote backup buckets are created without object versioning. They are labeled
+with operational metadata such as `managed_by=ansible`, `client=grayhaven`,
+`env=<environment>`, `project=<project>`, `role=<role>`, `purpose=restic`, and
+`host=<short-hostname>`.
+
+When remote backups are enabled, the matching encrypted `vault/common.yml` file
+must define the Google Cloud Storage credentials described in
+[`vault/common.yml`](#vaultcommonyml).
+
+### Observability
+
+Grafana Cloud observability is supported only for the production environment at
+this time. Leave `observability.grafana_cloud.enabled` and
+`observability.grafana_cloud.logs_enabled` set to false on the staging
+environment.
+
+Staging may still be inspected through the DigitalOcean metrics dashboard.
 
 [Back to top](#file-schema)
 
@@ -152,7 +212,18 @@ hosts.
 
 ```yaml
 root_password_hash: "$6$example-root-password-hash"
-restic_password: "example-restic-password"
+
+restic:
+  encryption_password: "example-restic-password"
+  remotes:
+    gcs:
+      credentials_json: |
+        {
+          "type": "service_account",
+          "project_id": "grayhaven",
+          "client_email": "restic@example.iam.gserviceaccount.com",
+          "private_key": "example-private-key"
+        }
 
 users:
   - username: jdoe
@@ -169,9 +240,41 @@ users:
 Supported keys:
 
 - `root_password_hash`: Linux password hash for the root account.
-- `restic_password`: password used by restic to encrypt backups.
+- `restic.encryption_password`: password used by restic to encrypt backups.
+- `restic.remotes.gcs.credentials_json`: optional Google Cloud service account
+  JSON used to create Google Cloud Storage buckets and access remote restic
+  repositories. Required when `backup.repositories.remote.provider` is `gcs`.
+- `grafana_cloud`: optional Grafana Cloud credential and endpoint settings.
+  Required when `observability.grafana_cloud.enabled` is true.
 - `users`: list of managed users. User operations are documented in
   [Managing Users](operations.md#managing-users).
+
+Older vault data may still define the flat `restic_password` key, but new vault
+data should use `restic.encryption_password`.
+
+Supported `grafana_cloud` keys:
+
+- `stack_url`: Grafana Cloud stack URL.
+- `alloy_api_key`: Grafana Cloud token used by Grafana Alloy for metric and log
+  shipping.
+- `prometheus.remote_write_url`: Grafana Cloud Prometheus remote-write URL.
+- `prometheus.username`: Grafana Cloud Prometheus remote-write username.
+- `prometheus.datasource_name`: Grafana Cloud Prometheus datasource name used
+  by managed alert-rule automation.
+- `loki.push_url`: Grafana Cloud Loki push URL. Required only when
+  `observability.grafana_cloud.logs_enabled` is true.
+- `loki.username`: Grafana Cloud Loki username. Required only when
+  `observability.grafana_cloud.logs_enabled` is true.
+- `alerting.api_token`: Grafana Cloud API token used to manage Ansible-owned
+  alert rules.
+- `alerting.folder`: Grafana Cloud folder for managed alert rules. Defaults to
+  `Grayhaven Systems LLC`.
+- `alerting.evaluation_group`: Grafana Cloud evaluation group for managed alert
+  rules. Defaults to `grayhaven-production-1m`.
+- `alerting.evaluation_interval`: Grafana Cloud evaluation interval for managed
+  alert rules. Defaults to `1m`.
+- `alerting.contact_point`: Grafana Cloud contact point for managed alert
+  rules. Defaults to `Grafana IRM`.
 
 Supported user keys:
 

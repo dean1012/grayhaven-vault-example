@@ -3,7 +3,18 @@
 # Real grayhaven-vault files under vault/ must be encrypted with Ansible Vault.
 
 root_password_hash: "$6$example-root-password-hash"
-restic_password: "example-restic-password"
+
+restic:
+  encryption_password: "example-restic-password"
+  remotes:
+    gcs:
+      credentials_json: |
+        {
+          "type": "service_account",
+          "project_id": "grayhaven",
+          "client_email": "restic@example.iam.gserviceaccount.com",
+          "private_key": "example-private-key"
+        }
 
 users:
   - username: jdoe
