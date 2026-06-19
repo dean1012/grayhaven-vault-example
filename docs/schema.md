@@ -161,6 +161,8 @@ users:
     ssh_keys:
       - "ssh-ed25519 AAAAexample jdoe@example"
     sudo: true
+    tmux_auto_attach: true
+    tmux_workspace: jdoe.tmux
     state: present
 ```
 
@@ -170,6 +172,26 @@ Supported keys:
 - `restic_password`: password used by restic to encrypt backups.
 - `users`: list of managed users. User operations are documented in
   [Managing Users](operations.md#managing-users).
+
+Supported user keys:
+
+- `username`: Linux username.
+- `full_name`: user comment/gecos field.
+- `password_hash`: Linux password hash for the account.
+- `ssh_keys`: list of public SSH keys installed for the account.
+- `sudo`: boolean. When true, password sudo access is enabled for the user.
+- `state`: `present` creates and manages the user; `absent` removes the user.
+- `home_mode`: optional for absent users. `archive` archives the home directory
+  before deletion. `delete` removes the home directory without archiving it.
+- `tmux_auto_attach`: optional boolean for sudo users. When true, interactive
+  SSH logins to bastion automatically attach to the standard operator tmux
+  session. Defaults to false.
+- `tmux_workspace`: optional workspace filename for sudo users. The file must
+  exist under `files/tmux-workspaces/` and is used by `gtmux` when creating the
+  user's tmux session.
+
+The `tmux_*` keys require `sudo: true` because the operator tmux console is for
+admin access on bastions.
 
 [Back to top](#file-schema)
 
