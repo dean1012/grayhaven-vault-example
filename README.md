@@ -38,6 +38,7 @@ automation for another organization requires review and adaptation.
 - [Setup](docs/setup.md)
 - [Vault Architecture](docs/vault-architecture.md)
 - [File Schema](docs/schema.md)
+- [Grafana Cloud Setup](docs/grafana-cloud-setup.md)
 - [Operations](docs/operations.md)
 
 [Back to top](#grayhaven-systems-llc-vault-example)
