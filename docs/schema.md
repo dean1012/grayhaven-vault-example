@@ -51,6 +51,11 @@ backup:
     - /home
     - /var/log
   exclude: []
+
+observability:
+  grafana_cloud:
+    enabled: false
+    logs_enabled: false
 ```
 
 Supported keys:
@@ -67,8 +72,19 @@ Supported keys:
 - `backup.exclude`: optional list of additional paths to exclude from backups.
   Excludes can override automatically included paths, including the configured
   homedir archive path.
+- `observability.grafana_cloud.enabled`: optional boolean. When true in
+  production, enables Grafana Cloud metrics and managed alert-rule automation.
+  Defaults to false.
+- `observability.grafana_cloud.logs_enabled`: optional boolean. When true and
+  Grafana Cloud observability is enabled, enables Grafana Cloud log shipping.
+  Defaults to false.
 
 Only `backup.repositories.local` is supported at this time.
+
+Grafana Cloud observability is supported only for the production environment at
+this time. Staging may still be inspected through the DigitalOcean metrics
+dashboard, but Grafana Cloud automation fails fast if enabled outside
+production.
 
 [Back to top](#file-schema)
 
