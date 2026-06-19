@@ -81,10 +81,17 @@ Supported keys:
 
 Only `backup.repositories.local` is supported at this time.
 
+### Observability
+
 Grafana Cloud observability is supported only for the production environment at
 this time. Staging may still be inspected through the DigitalOcean metrics
 dashboard, but Grafana Cloud automation fails fast if enabled outside
 production.
+
+When `observability.grafana_cloud.enabled` is true, the matching encrypted
+`vault/common.yml` file must also define the Grafana Cloud credentials described
+in [`vault/common.yml`](#vaultcommonyml). Manual Grafana Cloud setup is
+documented in [Grafana Cloud Setup](grafana-cloud-setup.md).
 
 [Back to top](#file-schema)
 
@@ -170,6 +177,23 @@ hosts.
 root_password_hash: "$6$example-root-password-hash"
 restic_password: "example-restic-password"
 
+grafana_cloud:
+  stack_url: "https://example.grafana.net"
+  alloy_api_key: "glc_example_alloy_token"
+  prometheus:
+    remote_write_url: "https://prometheus-prod-example.grafana.net/api/prom/push"
+    username: "123456"
+    datasource_name: "grafanacloud-example-prom"
+  loki:
+    push_url: "https://logs-prod-example.grafana.net/loki/api/v1/push"
+    username: "654321"
+  alerting:
+    api_token: "glsa_example_alerting_token"
+    folder: Grayhaven Systems LLC
+    evaluation_group: grayhaven-production-1m
+    evaluation_interval: 1m
+    contact_point: Grafana IRM
+
 users:
   - username: jdoe
     full_name: Jane Doe
@@ -186,8 +210,33 @@ Supported keys:
 
 - `root_password_hash`: Linux password hash for the root account.
 - `restic_password`: password used by restic to encrypt backups.
+- `grafana_cloud`: optional Grafana Cloud credential and endpoint settings.
+  Required when `observability.grafana_cloud.enabled` is true.
 - `users`: list of managed users. User operations are documented in
   [Managing Users](operations.md#managing-users).
+
+Supported `grafana_cloud` keys:
+
+- `stack_url`: Grafana Cloud stack URL.
+- `alloy_api_key`: Grafana Cloud token used by Grafana Alloy for metric and log
+  shipping.
+- `prometheus.remote_write_url`: Grafana Cloud Prometheus remote-write URL.
+- `prometheus.username`: Grafana Cloud Prometheus remote-write username.
+- `prometheus.datasource_name`: Grafana Cloud Prometheus datasource name used
+  by managed alert-rule automation.
+- `loki.push_url`: Grafana Cloud Loki push URL. Required only when
+  `observability.grafana_cloud.logs_enabled` is true.
+- `loki.username`: Grafana Cloud Loki username. Required only when
+  `observability.grafana_cloud.logs_enabled` is true.
+- `alerting.api_token`: Grafana Cloud API token used to manage Ansible-owned
+  alert rules.
+- `alerting.folder`: Grafana Cloud folder for managed alert rules. Defaults to
+  `Grayhaven Systems LLC`.
+- `alerting.evaluation_group`: Grafana Cloud evaluation group for managed
+  alert rules. Defaults to `grayhaven-production-1m`.
+- `alerting.evaluation_interval`: alert evaluation interval. Defaults to `1m`.
+- `alerting.contact_point`: Grafana Cloud contact point used by managed alert
+  rules. Defaults to `Grafana IRM`.
 
 Supported user keys:
 

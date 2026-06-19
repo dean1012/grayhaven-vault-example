@@ -5,6 +5,23 @@
 root_password_hash: "$6$example-root-password-hash"
 restic_password: "example-restic-password"
 
+grafana_cloud:
+  stack_url: "https://example.grafana.net"
+  alloy_api_key: "glc_example_alloy_token"
+  prometheus:
+    remote_write_url: "https://prometheus-prod-example.grafana.net/api/prom/push"
+    username: "123456"
+    datasource_name: "grafanacloud-example-prom"
+  loki:
+    push_url: "https://logs-prod-example.grafana.net/loki/api/v1/push"
+    username: "654321"
+  alerting:
+    api_token: "glsa_example_alerting_token"
+    folder: Grayhaven Systems LLC
+    evaluation_group: grayhaven-production-1m
+    evaluation_interval: 1m
+    contact_point: Grafana IRM
+
 users:
   - username: jdoe
     full_name: Jane Doe
