@@ -10,6 +10,7 @@ are documented in [File Schema](schema.md).
 - [Vault Password Rotation](#vault-password-rotation)
 - [Managing Users](#managing-users)
 - [Managing Operator Tmux Workspaces](#managing-operator-tmux-workspaces)
+- [Remote Backup Bucket Cleanup](#remote-backup-bucket-cleanup)
 - [Generating Password Hashes](#generating-password-hashes)
 - [Generating API Keys](#generating-api-keys)
 - [Deploy Key](#deploy-key)
@@ -114,6 +115,22 @@ documentation in
 [grayhaven-config-ansible](https://github.com/dean1012/grayhaven-config-ansible)
 explains how `gtmux` loads workspace files and how to capture an interactive
 tmux layout.
+
+[Back to top](#operations)
+
+## Remote Backup Bucket Cleanup
+
+When optional Google Cloud Storage remote backups are enabled, one restic bucket
+is created for each managed host. Removing a host from the live inventory does
+not automatically delete its remote backup bucket.
+
+The
+[GCS restic bucket cleanup](https://github.com/dean1012/grayhaven-config-ansible/blob/main/docs/operations.md#gcs-restic-bucket-cleanup)
+procedure in
+[grayhaven-config-ansible](https://github.com/dean1012/grayhaven-config-ansible)
+compares the live inventory with labeled remote backup buckets. Treat that
+procedure as destructive maintenance and review the dry-run output carefully
+before allowing deletion.
 
 [Back to top](#operations)
 
