@@ -14,3 +14,8 @@ backup:
     - /home
     - /var/log
   exclude: []
+
+observability:
+  grafana_cloud:
+    enabled: false
+    logs_enabled: false
