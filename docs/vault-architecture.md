@@ -1,7 +1,7 @@
 # Vault Architecture
 
-This document describes how the private `grayhaven-vault` repository is used by
-Grayhaven Systems LLC infrastructure automation. File formats are documented in
+This document describes how `grayhaven-vault` is used by Grayhaven Systems LLC
+infrastructure automation. File formats are documented in
 [File Schema](schema.md).
 
 ## Table of Contents
@@ -12,8 +12,8 @@ Grayhaven Systems LLC infrastructure automation. File formats are documented in
 
 ## Repository Role
 
-The private `grayhaven-vault` repository provides environment-specific
-configuration, shared plaintext selectors, and encrypted operational values.
+`grayhaven-vault` provides environment-specific configuration, shared plaintext
+selectors, and encrypted operational values.
 
 In the real private repository:
 
