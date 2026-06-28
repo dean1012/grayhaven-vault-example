@@ -61,6 +61,10 @@ observability:
   grafana_cloud:
     enabled: false
     logs_enabled: false
+
+managed_baseline_backupctl_repo_url: https://github.com/dean1012/grayhaven-backupctl.git
+managed_baseline_backupctl_repo_ref: main
+managed_baseline_backupctl_checkout_dir: /home/ansible/grayhaven-backupctl
 ```
 
 Supported keys:
@@ -92,6 +96,12 @@ Supported keys:
 - `observability.grafana_cloud.logs_enabled`: optional boolean. When true and
   Grafana Cloud observability is enabled, enables Grafana Cloud log shipping.
   Defaults to false.
+- `managed_baseline_backupctl_repo_url`: Git repository URL used by Ansible to
+  install `grayhaven-backupctl`.
+- `managed_baseline_backupctl_repo_ref`: Git ref used by Ansible when checking
+  out `grayhaven-backupctl`.
+- `managed_baseline_backupctl_checkout_dir`: local checkout path for
+  `grayhaven-backupctl` on managed hosts.
 
 ### Remote Backup Repository
 
@@ -129,6 +139,14 @@ this time. Leave `observability.grafana_cloud.enabled` and
 environment.
 
 Staging may still be inspected through the DigitalOcean metrics dashboard.
+
+### Backup Operator Utility
+
+Ansible installs
+[`grayhaven-backupctl`](https://github.com/dean1012/grayhaven-backupctl) from
+the repository, ref, and checkout path configured in `config.yml`. Keep these
+values pointed at the reviewed production utility unless intentionally testing a
+different branch in a non-production environment.
 
 [Back to top](#file-schema)
 
