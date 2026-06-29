@@ -97,11 +97,14 @@ Supported keys:
   Grafana Cloud observability is enabled, enables Grafana Cloud log shipping.
   Defaults to false.
 - `managed_baseline_backupctl_repo_url`: Git repository URL used by Ansible to
-  install `grayhaven-backupctl`.
+  install `grayhaven-backupctl`. Defaults to
+  `https://github.com/dean1012/grayhaven-backupctl.git` if unset.
 - `managed_baseline_backupctl_repo_ref`: Git ref used by Ansible when checking
-  out `grayhaven-backupctl`.
+  out `grayhaven-backupctl`. Defaults to `main` if unset.
 - `managed_baseline_backupctl_checkout_dir`: local checkout path for
-  `grayhaven-backupctl` on managed hosts.
+  `grayhaven-backupctl` on managed hosts. Defaults to
+  `/home/ansible/grayhaven-backupctl` if unset. The checkout path must remain
+  below `/home/ansible`.
 
 ### Remote Backup Repository
 
@@ -144,9 +147,16 @@ Staging may still be inspected through the DigitalOcean metrics dashboard.
 
 Ansible installs
 [`grayhaven-backupctl`](https://github.com/dean1012/grayhaven-backupctl) from
-the repository, ref, and checkout path configured in `config.yml`. Keep these
-values pointed at the reviewed production utility unless intentionally testing a
-different branch in a non-production environment.
+the repository, ref, and checkout path configured in `config.yml`. If those
+values are unset, the Ansible role defaults to the public
+`grayhaven-backupctl` repository, the `main` branch, and
+`/home/ansible/grayhaven-backupctl`.
+
+Keep these values pointed at the reviewed production utility unless
+intentionally testing a different branch in a non-production environment. The
+checkout path must be below `/home/ansible` so the managed `ansible` user owns
+the checkout and convergence can safely clean up old checkout locations when
+the configured path changes.
 
 [Back to top](#file-schema)
 
