@@ -25,6 +25,6 @@ observability:
     enabled: false
     logs_enabled: false
 
-managed_baseline_backupctl_repo_url: https://github.com/dean1012/grayhaven-backupctl.git
-managed_baseline_backupctl_repo_ref: main
-managed_baseline_backupctl_checkout_dir: /home/ansible/grayhaven-backupctl
+backupctl_repo_url: https://github.com/dean1012/grayhaven-backupctl.git
+backupctl_repo_ref: main
+backupctl_checkout_dir: /home/ansible/grayhaven-backupctl
