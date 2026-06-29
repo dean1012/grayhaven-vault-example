@@ -62,9 +62,9 @@ observability:
     enabled: true
     logs_enabled: true
 
-managed_baseline_backupctl_repo_url: https://github.com/dean1012/grayhaven-backupctl.git
-managed_baseline_backupctl_repo_ref: main
-managed_baseline_backupctl_checkout_dir: /home/ansible/grayhaven-backupctl
+backupctl_repo_url: https://github.com/dean1012/grayhaven-backupctl.git
+backupctl_repo_ref: main
+backupctl_checkout_dir: /home/ansible/grayhaven-backupctl
 ```
 
 Supported keys:
@@ -96,15 +96,14 @@ Supported keys:
 - `observability.grafana_cloud.logs_enabled`: optional boolean. When true and
   Grafana Cloud observability is enabled, enables Grafana Cloud log shipping.
   Defaults to false.
-- `managed_baseline_backupctl_repo_url`: Git repository URL used by Ansible to
-  install `grayhaven-backupctl`. Defaults to
+- `backupctl_repo_url`: Git repository URL used by Ansible to install
+  `grayhaven-backupctl`. Defaults to
   `https://github.com/dean1012/grayhaven-backupctl.git` if unset.
-- `managed_baseline_backupctl_repo_ref`: Git ref used by Ansible when checking
-  out `grayhaven-backupctl`. Defaults to `main` if unset.
-- `managed_baseline_backupctl_checkout_dir`: local checkout path for
-  `grayhaven-backupctl` on managed hosts. Defaults to
-  `/home/ansible/grayhaven-backupctl` if unset. The checkout path must remain
-  below `/home/ansible`.
+- `backupctl_repo_ref`: Git ref used by Ansible when checking out
+  `grayhaven-backupctl`. Defaults to `main` if unset.
+- `backupctl_checkout_dir`: local checkout path for `grayhaven-backupctl` on
+  managed hosts. Defaults to `/home/ansible/grayhaven-backupctl` if unset. The
+  checkout path must remain below `/home/ansible`.
 
 ### Remote Backup Repository
 
