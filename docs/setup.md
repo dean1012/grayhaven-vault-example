@@ -27,7 +27,7 @@ request features when GitHub exposes a control for them.
 
 Use
 [`grayhaven-vault-example`](https://github.com/dean1012/grayhaven-vault-example)
-as the documented starting shape for the private vault repository.
+as the documented starting shape for `grayhaven-vault`.
 
 Example setup flow:
 
