@@ -419,6 +419,10 @@ Supported keys:
   secret for hosted-domain deployment webhooks. Set this to the matching
   [`GRAYHAVEN_DEPLOY_WEBHOOK_SECRET`](setup.md#set-up-hosted-domain-repositories)
   repository secret value.
+  The same setup section documents the matching hosted-domain repository
+  variables, including `GRAYHAVEN_DEPLOY_WEBHOOK_URL`,
+  `GRAYHAVEN_DEPLOY_WEBHOOK_DISABLE`, and
+  `GRAYHAVEN_DEPLOY_DISABLE_SSL_VERIFICATION`.
 - `hosted_domains[].dev`: required development vhost configuration. Every
   hosted domain receives a development vhost.
 - `hosted_domains[].dev.auth_realm`: optional HTTP basic-auth realm for the
