@@ -181,8 +181,8 @@ The `digitalocean_dns_api_token` value should be scoped as follows:
 ## Deploy Key
 
 Automation accesses `grayhaven-vault` through a read-only GitHub deploy key.
-The key is configured in GitHub for that repository and is supplied to deployed
-infrastructure through
+The key is configured in GitHub for that repository and is supplied
+to deployed infrastructure through
 [`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu).
 
 [Back to top](#operations)
