@@ -10,6 +10,7 @@ hosted_domains:
       type: static
       repository:
         url: https://github.com/example/grayhaven-web.git
+        webhook_secret: "example_grayhaven_deploy_webhook_secret"
     dev:
       auth_realm: Grayhaven Systems LLC Development Environment
       htpasswd_entries:
@@ -20,6 +21,7 @@ hosted_domains:
       type: static
       repository:
         url: https://github.com/example/personal-web.git
+        webhook_secret: "example_personal_deploy_webhook_secret"
     dev:
       auth_realm: jerry-smith.net Development Environment
       htpasswd_entries:

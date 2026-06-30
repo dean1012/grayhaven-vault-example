@@ -388,6 +388,7 @@ hosted_domains:
       type: static
       repository:
         url: https://github.com/example/grayhaven-web.git
+        webhook_secret: "example_grayhaven_deploy_webhook_secret"
     dev:
       auth_realm: Grayhaven Systems LLC Development Environment
       htpasswd_entries:
@@ -410,10 +411,14 @@ Supported keys:
   Omit this block to render the generic fallback site.
 - `hosted_domains[].deployment.type`: website deployment type. Only `static`
   is supported.
-- `hosted_domains[].deployment.repository.url`: public HTTPS Git repository
-  used for static website content. For `type: static`, the `main` branch
-  deploys `site/frontend/` to the apex and `www` document root, and the `dev`
-  branch deploys `site/frontend/` to the development document root.
+- `hosted_domains[].deployment.repository.url`: required public HTTPS Git
+  repository used for static website content. For `type: static`, the `main`
+  branch deploys `site/frontend/` to the apex and `www` document root, and the
+  `dev` branch deploys `site/frontend/` to the development document root.
+- `hosted_domains[].deployment.repository.webhook_secret`: required shared
+  secret for hosted-domain deployment webhooks. Set this to the matching
+  [`GRAYHAVEN_DEPLOY_WEBHOOK_SECRET`](setup.md#set-up-hosted-domain-repositories)
+  repository secret value.
 - `hosted_domains[].dev`: required development vhost configuration. Every
   hosted domain receives a development vhost.
 - `hosted_domains[].dev.auth_realm`: optional HTTP basic-auth realm for the
