@@ -173,40 +173,56 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: >-
+      vars.GRAYHAVEN_DEPLOY_WEBHOOK_DISABLE != 'true'
 
     steps:
       - name: Notify Grayhaven deployment webhook
         env:
           GRAYHAVEN_DEPLOY_WEBHOOK_SECRET: ${{ secrets.GRAYHAVEN_DEPLOY_WEBHOOK_SECRET }}
           GRAYHAVEN_DEPLOY_WEBHOOK_URL: ${{ vars.GRAYHAVEN_DEPLOY_WEBHOOK_URL }}
+          GRAYHAVEN_DEPLOY_DISABLE_SSL_VERIFICATION: ${{ vars.GRAYHAVEN_DEPLOY_DISABLE_SSL_VERIFICATION }}
         run: |
           python3 - <<'PY'
           import hashlib
           import hmac
           import json
           import os
+          import ssl
           import urllib.request
 
-          secret = os.environ["GRAYHAVEN_DEPLOY_WEBHOOK_SECRET"].encode()
-          payload = json.dumps(
-              {
-                  "repository": os.environ["GITHUB_REPOSITORY"],
-                  "branch": os.environ["GITHUB_REF_NAME"],
-                  "sha": os.environ["GITHUB_SHA"],
+          webhook_url = os.environ["GRAYHAVEN_DEPLOY_WEBHOOK_URL"]
+          webhook_secret = os.environ["GRAYHAVEN_DEPLOY_WEBHOOK_SECRET"]
+          disable_ssl_verification = (
+              os.environ.get("GRAYHAVEN_DEPLOY_DISABLE_SSL_VERIFICATION", "").lower()
+              == "true"
+          )
+          ssl_context = ssl._create_unverified_context() if disable_ssl_verification else None
+          payload = {
+              "ref": os.environ["GITHUB_REF"],
+              "after": os.environ["GITHUB_SHA"],
+              "repository": {
+                  "full_name": os.environ["GITHUB_REPOSITORY"],
+                  "clone_url": f"https://github.com/{os.environ['GITHUB_REPOSITORY']}.git",
+                  "html_url": f"https://github.com/{os.environ['GITHUB_REPOSITORY']}",
               },
-              separators=(",", ":"),
-          ).encode()
-          signature = hmac.new(secret, payload, hashlib.sha256).hexdigest()
+              "sender": {
+                  "login": os.environ["GITHUB_ACTOR"],
+              },
+          }
+          body = json.dumps(payload, separators=(",", ":"), sort_keys=True).encode()
+          signature = hmac.new(webhook_secret.encode(), body, hashlib.sha256).hexdigest()
           request = urllib.request.Request(
-              os.environ["GRAYHAVEN_DEPLOY_WEBHOOK_URL"],
-              data=payload,
+              webhook_url,
+              data=body,
               headers={
                   "Content-Type": "application/json",
+                  "X-GitHub-Event": "push",
                   "X-Hub-Signature-256": f"sha256={signature}",
               },
               method="POST",
           )
-          urllib.request.urlopen(request, timeout=30).read()
+          urllib.request.urlopen(request, timeout=30, context=ssl_context).read()
           PY
 ```
 
@@ -229,5 +245,17 @@ https://<apex>/.grayhaven/deploy
 
 Replace `<apex>` with the hosted domain apex name, such as
 `example.com`.
+
+Create a repository variable named `GRAYHAVEN_DEPLOY_WEBHOOK_DISABLE` only when
+deployment should be disabled. Set it to `true` to skip the deployment job
+entirely. Leave it unset or set it to `false` for normal deployment.
+
+Create a repository variable named `GRAYHAVEN_DEPLOY_DISABLE_SSL_VERIFICATION`
+only for temporary testing against a webhook endpoint with a staging or
+otherwise untrusted certificate chain. Set it to `true` to bypass TLS
+certificate verification for the deployment callback. Leave it unset or set it
+to `false` for normal deployment. When the hosted environment uses staging
+certificates, set this variable to `true` until the environment is switched to
+production certificates.
 
 [Back to top](#setup)
