@@ -384,7 +384,10 @@ digitalocean_dns_api_token: "dop_v1_example_dns_token"
 
 hosted_domains:
   - domain: grayhavensystems.com
-    static_site: grayhavensystems.com
+    deployment:
+      type: static
+      repository:
+        url: https://github.com/example/grayhaven-web.git
     dev:
       auth_realm: Grayhaven Systems LLC Development Environment
       htpasswd_entries:
@@ -403,17 +406,23 @@ Supported keys:
 - `hosted_domains`: list of domains served by
   [`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible).
 - `hosted_domains[].domain`: apex domain name.
-- `hosted_domains[].static_site`: optional source directory under
-  `files/static-sites/` in
-  `grayhaven-config-ansible`.
-  Omit this value to render the generic placeholder site.
+- `hosted_domains[].deployment`: optional website deployment configuration.
+  Omit this block to render the generic fallback site.
+- `hosted_domains[].deployment.type`: website deployment type. Only `static`
+  is supported.
+- `hosted_domains[].deployment.repository.url`: public HTTPS Git repository
+  used for static website content. For `type: static`, the `main` branch
+  deploys `site/frontend/` to the apex and `www` document root, and the `dev`
+  branch deploys `site/frontend/` to the development document root.
+- `hosted_domains[].dev`: required development vhost configuration. Every
+  hosted domain receives a development vhost.
 - `hosted_domains[].dev.auth_realm`: optional HTTP basic-auth realm for the
   development vhost.
-- `hosted_domains[].dev.htpasswd_entries`: full htpasswd file entries for the
-  development vhost.
+- `hosted_domains[].dev.htpasswd_entries`: required full htpasswd file entries
+  for the development vhost. At least one entry is required.
 
 `hosted_domains[].dev.htpasswd_entries` values are credential material and
-belong in encrypted vault files in the real private repository.
+belong in encrypted vault files in `grayhaven-vault`.
 
 ### Hosted Domain DNS Coordination
 
