@@ -246,6 +246,11 @@ https://<apex>/.grayhaven/deploy
 Replace `<apex>` with the hosted domain apex name, such as
 `example.com`.
 
+The deployment workflow should treat `GRAYHAVEN_DEPLOY_WEBHOOK_URL` and
+`GRAYHAVEN_DEPLOY_WEBHOOK_SECRET` as required values. If either value is
+missing, the deployment job should fail clearly instead of silently skipping
+deployment.
+
 Create a repository variable named `GRAYHAVEN_DEPLOY_WEBHOOK_DISABLE` only when
 deployment should be disabled. Set it to `true` to skip the deployment job
 entirely. Leave it unset or set it to `false` for normal deployment.

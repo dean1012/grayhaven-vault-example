@@ -34,6 +34,11 @@ The private repository uses branches to represent environments:
 - `main`: production values.
 - `staging`: staging values.
 
+OpenTofu reads the `staging` ref for the `staging` workspace and the `main` ref
+for the `prod` workspace. The active control bastion receives the same selected
+vault ref through the `grayhaven-vault-ref` cloud tag and checks out that ref
+during convergence.
+
 The local checkout branch does not need to match the active OpenTofu workspace,
 but the required refs must be fetched locally.
 
@@ -46,8 +51,8 @@ reads `config.yml` and `firewall.yml` from the workspace-selected Git ref in a
 local checkout during OpenTofu plan and apply.
 
 [`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible)
-checks out the same environment ref on the active control bastion during
-convergence and reads the matching `config.yml`, `firewall.yml`, and
-`vault/*.yml` files.
+uses the `grayhaven-vault-ref` cloud tag to check out the same environment ref
+on the active control bastion during convergence and reads the matching
+`config.yml`, `firewall.yml`, and `vault/*.yml` files.
 
 [Back to top](#vault-architecture)
