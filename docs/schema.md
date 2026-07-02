@@ -36,8 +36,13 @@ Infrastructure automation does not provide fallback defaults for missing
 `config.yml` is plaintext and is read by both OpenTofu and Ansible.
 
 ```yaml
-certificate_environment: staging
+certificate:
+  environment: staging
+  email: admin@example.com
 discord_webhook: testing
+
+network:
+  vpc_cidr: 10.20.0.0/16
 
 backup:
   repositories:
@@ -69,8 +74,13 @@ backupctl_checkout_dir: /home/ansible/grayhaven-backupctl
 
 Supported keys:
 
-- `certificate_environment`: `staging` or `production`.
+- `certificate.environment`: `staging` or `production`.
+- `certificate.email`: email address supplied to Certbot for web certificate
+  registration and renewal.
 - `discord_webhook`: `testing` or `production`.
+- `network.vpc_cidr`: environment VPC CIDR block. This value is read by
+  OpenTofu when creating the environment VPC and by Ansible when deriving
+  private-source fallback rules.
 - `backup.repositories.local.repository_path`: local restic repository path.
 - `backup.repositories.local.homedir_archive_path`: local path for removed user
   home directory archives.
@@ -404,6 +414,8 @@ Supported keys:
   variables, including `GRAYHAVEN_DEPLOY_WEBHOOK_URL`,
   `GRAYHAVEN_DEPLOY_WEBHOOK_DISABLE`, and
   `GRAYHAVEN_DEPLOY_DISABLE_SSL_VERIFICATION`.
+  Hosted-domain deployment workflows should fail clearly if the required
+  webhook URL or shared secret is missing.
 - `hosted_domains[].dev`: required development vhost configuration. Every
   hosted domain receives a development vhost.
 - `hosted_domains[].dev.auth_realm`: optional HTTP basic-auth realm for the
