@@ -1,6 +1,11 @@
 ---
-certificate_environment: staging
+certificate:
+  environment: staging
+  email: admin@example.com
 discord_webhook: testing
+
+network:
+  vpc_cidr: 10.30.0.0/16
 
 backup:
   repositories:
