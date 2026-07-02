@@ -323,7 +323,7 @@ Supported `grafana_cloud` keys:
 - `loki.username`: Grafana Cloud Loki username. Required only when
   `observability.grafana_cloud.logs_enabled` is true.
 - `alerting.api_token`: Grafana Cloud API token used to manage Ansible-owned
-  alert rules.
+  alert rules and initial convergence silences.
 - `alerting.folder`: Grafana Cloud folder for managed alert rules. Defaults to
   `Grayhaven Systems LLC`.
 - `alerting.evaluation_group`: Grafana Cloud evaluation group for managed
