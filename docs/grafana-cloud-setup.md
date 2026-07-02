@@ -88,14 +88,16 @@ configuration, not repository state.
 
 ## Alert Rule API Token
 
-Create a Grafana Cloud API token for Ansible-managed alert rules. Store the
-token as `grafana_cloud.alerting.api_token` in `vault/common.yml`.
+Create a Grafana Cloud API token for Ansible-managed alert rules and initial
+convergence silences. Store the token as `grafana_cloud.alerting.api_token` in
+`vault/common.yml`.
 
 The token needs these scopes:
 
 | Scope |
 | ----- |
 | Alerting:Write via Provisioning API |
+| Alerting:Silences Writer |
 | Data sources:Reader |
 | Folders:Reader |
 
