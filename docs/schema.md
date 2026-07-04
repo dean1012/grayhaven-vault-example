@@ -281,6 +281,8 @@ grafana_cloud:
     evaluation_group: grayhaven-production-1m
     evaluation_interval: 1m
     contact_point: Grafana IRM
+  irm_alert_groups:
+    api_token: "glsa_example_irm_alert_groups_reader_token"
 
 users:
   - username: jdoe
@@ -331,6 +333,9 @@ Supported `grafana_cloud` keys:
 - `alerting.evaluation_interval`: alert evaluation interval. Defaults to `1m`.
 - `alerting.contact_point`: Grafana Cloud contact point used by managed alert
   rules. Defaults to `Grafana IRM`.
+- `irm_alert_groups.api_token`: Grafana Cloud API token used to read sanitized
+  IRM alert-group state for operational reporting. Required when Grafana Cloud
+  observability is enabled.
 
 Supported user keys:
 
