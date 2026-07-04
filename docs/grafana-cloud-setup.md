@@ -12,6 +12,7 @@ in [File Schema](schema.md).
 - [Notification Policy](#notification-policy)
 - [Grafana IRM Routing](#grafana-irm-routing)
 - [Alert Rule API Token](#alert-rule-api-token)
+- [IRM Alert Groups API Token](#irm-alert-groups-api-token)
 - [Vault Values](#vault-values)
 
 ## Stack
@@ -106,6 +107,22 @@ rules should not use that label.
 
 [Back to top](#grafana-cloud-setup)
 
+## IRM Alert Groups API Token
+
+Create a Grafana Cloud API token for reading IRM alert-group state. Store the
+token as `grafana_cloud.irm_alert_groups.api_token` in `vault/common.yml`.
+
+The token needs this permission:
+
+| Permission |
+| ---------- |
+| IRM:Alert Groups Reader |
+
+The token is used to publish sanitized IRM alert-group state for operational
+reporting when Grafana Cloud observability is enabled.
+
+[Back to top](#grafana-cloud-setup)
+
 ## Vault Values
 
 Enable Grafana Cloud in `config.yml` only for production:
@@ -136,6 +153,8 @@ grafana_cloud:
     evaluation_group: grayhaven-production-1m
     evaluation_interval: 1m
     contact_point: Grafana IRM
+  irm_alert_groups:
+    api_token: "glsa_example_irm_alert_groups_reader_token"
 ```
 
 If `logs_enabled` is false, the Loki values are not used.
