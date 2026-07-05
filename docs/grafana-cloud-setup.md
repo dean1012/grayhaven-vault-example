@@ -109,17 +109,21 @@ rules should not use that label.
 
 ## IRM Alert Groups API Token
 
-Create a Grafana Cloud API token for reading IRM alert-group state. Store the
-token as `grafana_cloud.irm_alert_groups.api_token` in `vault/common.yml`.
+Create a Grafana Cloud API token for reading IRM alert-group state and related
+user metadata. Store the token as `grafana_cloud.irm_alert_groups.api_token`
+in `vault/common.yml`.
 
-The token needs this permission:
+The token needs these permissions:
 
 | Permission |
 | ---------- |
+| User administration:Reader (organizational) |
 | IRM:Alert Groups Reader |
+| IRM:User Settings Reader |
 
-The token is used to publish sanitized IRM alert-group state for operational
-reporting when Grafana Cloud observability is enabled.
+The token is used to publish sanitized IRM alert-group state and
+acknowledgement ownership for operational reporting when Grafana Cloud
+observability is enabled.
 
 [Back to top](#grafana-cloud-setup)
 
