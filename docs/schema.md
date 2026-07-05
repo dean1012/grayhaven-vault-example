@@ -334,8 +334,8 @@ Supported `grafana_cloud` keys:
 - `alerting.contact_point`: Grafana Cloud contact point used by managed alert
   rules. Defaults to `Grafana IRM`.
 - `irm_alert_groups.api_token`: Grafana Cloud API token used to read sanitized
-  IRM alert-group state for operational reporting. Required when Grafana Cloud
-  observability is enabled.
+  IRM alert-group state and acknowledgement ownership for operational
+  reporting. Required when Grafana Cloud observability is enabled.
 
 Supported user keys:
 
