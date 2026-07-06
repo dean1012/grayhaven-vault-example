@@ -281,6 +281,8 @@ Supported keys:
 - `restic.remotes.gcs.credentials_json`: optional Google Cloud service account
   JSON used to create Google Cloud Storage buckets and access remote restic
   repositories. Required when `backup.repositories.remote.provider` is `gcs`.
+  The service account must have these permissions:
+  `Cloud Storage/Storage Admin` and `Monitoring/Monitoring Viewer`.
 - `grafana_cloud`: optional Grafana Cloud credential and endpoint settings.
   Required when `observability.grafana_cloud.enabled` is true.
 - `users`: list of managed users. User operations are documented in
