@@ -220,6 +220,9 @@ Supported top-level keys:
 The `firewalls.web.inbound` policy must include TCP `80` and TCP `443` rules.
 OpenTofu validates this shape before applying the TLS-mode-specific effective
 cloud firewall.
+When an environment has two or more web hosts behind load-balancer TLS,
+OpenTofu and Ansible add TCP `8791` automatically for private web-to-web
+deployment fanout.
 
 It is strongly recommended that each role allow outbound HTTP, HTTPS, DNS, and
 NTP traffic unless there is a deliberate reason to narrow egress further. This
