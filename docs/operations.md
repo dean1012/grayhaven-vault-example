@@ -13,6 +13,7 @@ are documented in [File Schema](schema.md).
 - [Remote Backup Bucket Cleanup](#remote-backup-bucket-cleanup)
 - [Generating Password Hashes](#generating-password-hashes)
 - [Generating API Keys](#generating-api-keys)
+- [Rotating Website Deployment Secrets](#rotating-website-deployment-secrets)
 - [Deploy Key](#deploy-key)
 
 ## Vault Encryption
@@ -175,6 +176,37 @@ The `digitalocean_dns_api_token` value should be scoped as follows:
 | Resource Type | Permissions                  |
 | ------------- | ---------------------------- |
 | domain        | create, read, update, delete |
+
+[Back to top](#operations)
+
+## Rotating Website Deployment Secrets
+
+Hosted-domain deployment webhook secrets are shared between GitHub repository
+secrets and `vault/web.yml`.
+
+To rotate a hosted-domain deployment webhook secret:
+
+1. Generate a new secret:
+
+   ```bash
+   openssl rand -base64 48
+   ```
+
+2. Update `hosted_domains[].deployment.repository.webhook_secret` in
+   `vault/web.yml` on the target environment branch.
+3. Commit and publish the vault change.
+4. Run convergence so web hosts receive the new vault value.
+5. Update the hosted-domain repository secret named
+   `GRAYHAVEN_DEPLOY_WEBHOOK_SECRET` to the same value.
+
+During rotation, deployment webhooks can fail if GitHub sends a request signed
+with a different value than the one currently deployed on web hosts. Rotate
+during a quiet deployment window, and avoid pushing site changes until
+convergence and the GitHub secret update are both complete.
+
+The `web_deploy_fanout_secret` value is separate from hosted-domain repository
+webhook secrets. It authenticates private web-to-web fanout requests between web
+hosts and should be rotated through the vault followed by convergence.
 
 [Back to top](#operations)
 

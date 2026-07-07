@@ -3,6 +3,7 @@
 # Real grayhaven-vault files under vault/ must be encrypted with Ansible Vault.
 
 digitalocean_dns_api_token: "dop_v1_example_dns_token"
+web_deploy_fanout_secret: "example_private_web_deploy_fanout_secret"
 
 hosted_domains:
   - domain: grayhavensystems.com

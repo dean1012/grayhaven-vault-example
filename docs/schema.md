@@ -398,6 +398,7 @@ Supported keys:
 
 ```yaml
 digitalocean_dns_api_token: "dop_v1_example_dns_token"
+web_deploy_fanout_secret: "example_private_web_deploy_fanout_secret"
 
 hosted_domains:
   - domain: grayhavensystems.com
@@ -421,6 +422,10 @@ Supported keys:
 
 - `digitalocean_dns_api_token`: DigitalOcean API token used by Certbot DNS-01
   automation in host TLS mode.
+- `web_deploy_fanout_secret`: shared secret used by web hosts to authenticate
+  private website deployment fanout requests between web hosts. This is required
+  when an environment has two or more web hosts behind load-balancer TLS, and it
+  must be different from every per-domain GitHub deployment webhook secret.
 - `hosted_domains`: list of domains served by
   [`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible).
 - `hosted_domains[].domain`: apex domain name.
@@ -436,6 +441,8 @@ Supported keys:
   secret for hosted-domain deployment webhooks. Set this to the matching
   [`GRAYHAVEN_DEPLOY_WEBHOOK_SECRET`](setup.md#set-up-hosted-domain-repositories)
   repository secret value.
+  This secret authenticates GitHub-to-Grayhaven deployment requests for one
+  hosted-domain repository. It is not used for web-to-web deployment fanout.
   The same setup section documents the matching hosted-domain repository
   variables, including `GRAYHAVEN_DEPLOY_WEBHOOK_URL`,
   `GRAYHAVEN_DEPLOY_WEBHOOK_DISABLE`, and
