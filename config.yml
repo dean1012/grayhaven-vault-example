@@ -36,15 +36,10 @@ backupctl_repo_ref: main
 backupctl_checkout_dir: /home/ansible/grayhaven-backupctl
 
 timetracker:
-  enabled: true
   hostname: timetracker.staging.grayhavensystems.com
-  image_digest: sha256:7d94f90583a549e52770cdf7a3e5a239dd473adde1c1ab2f1de55b5dada6a37d
-  contact_url: https://grayhavensystems.com/contact
+  image_digest: sha256:EXAMPLE7a3e5  # 1.2.3-7a3e5
   database_path: /var/lib/timetracker/db/timetracker.db
   backup_artifact_path: /var/backups/timetracker
   backup_retention_days: 7
   branding_repository: https://github.com/dean1012/grayhaven-branding.git
   branding_ref: main
-  branding_asset_allowlist:
-    - logo.png
-    - favicon.ico

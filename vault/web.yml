@@ -36,8 +36,10 @@ hosted_domains:
 timetracker:
   flask_secret_key: "example_flask_secret_key"
   database_passphrase: "example_database_passphrase"
-  bootstrap_user_manifest: '[{"username": "admin", "password": "example_password"}]'
-  branding_deploy_key: |
-    -----BEGIN OPENSSH PRIVATE KEY-----
-    example_branding_deploy_key
-    -----END OPENSSH PRIVATE KEY-----
+  initial_users:
+    - email: "test@example.invalid"
+      first_name: "Test"
+      last_name: "User"
+      password_hash: "$argon2id$v=19$m=65536,t=3,p=4$REPLACE$REPLACE"
+      totp_secret: "EXAMPLE"  # optional
+      admin: true  # false for regular user

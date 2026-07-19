@@ -216,11 +216,11 @@ Time Tracker uses several secret values defined in `vault/web.yml`:
 - `database_passphrase`: Used to encrypt the SQLCipher database. **Do not
   rotate this automatically**. The database must be manually rekeyed if this
   passphrase is changed.
-- `branding_deploy_key`: Read-only SSH deploy key for pulling the branding
-  repository.
 
 To rotate these secrets, update `vault/web.yml`, publish the branch, and run
 convergence. If rotating the `database_passphrase`, the application will fail
-to start until the database is manually rekeyed to match.
-
+to start until the database is manually rekeyed to match. To manually rekey
+the database before running convergence, access the host, run
+`sqlcipher /var/lib/timetracker/db/timetracker.db`, and execute
+`PRAGMA key = 'old_passphrase'; PRAGMA rekey = 'new_passphrase';`
 [Back to top](#operations)
