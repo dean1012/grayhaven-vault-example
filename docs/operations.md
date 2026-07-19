@@ -206,3 +206,21 @@ infrastructure through
 [`grayhaven-infra-opentofu`](https://github.com/dean1012/grayhaven-infra-opentofu).
 
 [Back to top](#operations)
+
+## Time Tracker Operations
+
+Time Tracker uses several secret values defined in `vault/web.yml`:
+
+- `flask_secret_key`: Used to sign session cookies. Rotating this key will
+  invalidate all active user sessions.
+- `database_passphrase`: Used to encrypt the SQLCipher database. **Do not
+  rotate this automatically**. The database must be manually rekeyed if this
+  passphrase is changed.
+- `branding_deploy_key`: Read-only SSH deploy key for pulling the branding
+  repository.
+
+To rotate these secrets, update `vault/web.yml`, publish the branch, and run
+convergence. If rotating the `database_passphrase`, the application will fail
+to start until the database is manually rekeyed to match.
+
+[Back to top](#operations)

@@ -32,3 +32,12 @@ hosted_domains:
     dev:
       htpasswd_entries:
         - "developer:$2y$05$example-generic"
+
+timetracker:
+  flask_secret_key: "example_flask_secret_key"
+  database_passphrase: "example_database_passphrase"
+  bootstrap_user_manifest: '[{"username": "admin", "password": "example_password"}]'
+  branding_deploy_key: |
+    -----BEGIN OPENSSH PRIVATE KEY-----
+    example_branding_deploy_key
+    -----END OPENSSH PRIVATE KEY-----

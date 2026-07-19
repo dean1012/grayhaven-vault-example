@@ -70,6 +70,20 @@ observability:
 backupctl_repo_url: https://github.com/dean1012/grayhaven-backupctl.git
 backupctl_repo_ref: main
 backupctl_checkout_dir: /home/ansible/grayhaven-backupctl
+
+timetracker:
+  enabled: true
+  hostname: timetracker.staging.grayhavensystems.com
+  image_digest: sha256:7d94f90583a549e52770cdf7a3e5a239dd473adde1c1ab2f1de55b5dada6a37d
+  contact_url: https://grayhavensystems.com/contact
+  database_path: /var/lib/timetracker/db/timetracker.db
+  backup_artifact_path: /var/backups/timetracker
+  backup_retention_days: 7
+  branding_repository: https://github.com/dean1012/grayhaven-branding.git
+  branding_ref: main
+  branding_asset_allowlist:
+    - logo.png
+    - favicon.ico
 ```
 
 Supported keys:
@@ -114,6 +128,16 @@ Supported keys:
 - `backupctl_checkout_dir`: local checkout path for `grayhaven-backupctl` on
   managed hosts. Defaults to `/home/ansible/grayhaven-backupctl` if unset. The
   checkout path must remain below `/home/ansible`.
+- `timetracker.enabled`: boolean to enable Time Tracker deployment.
+- `timetracker.hostname`: public hostname for Time Tracker.
+- `timetracker.image_digest`: immutable image digest for Time Tracker container.
+- `timetracker.contact_url`: support contact URL.
+- `timetracker.database_path`: persistent path for Time Tracker SQLite database.
+- `timetracker.backup_artifact_path`: local path for creating backup artifacts.
+- `timetracker.backup_retention_days`: number of days to retain backup artifacts.
+- `timetracker.branding_repository`: Git repository URL for runtime branding.
+- `timetracker.branding_ref`: Git ref for runtime branding.
+- `timetracker.branding_asset_allowlist`: list of allowed branding asset files.
 
 ### Remote Backup Repository
 
@@ -395,6 +419,15 @@ hosted_domains:
     dev:
       htpasswd_entries:
         - "developer:$2y$05$example-generic"
+
+timetracker:
+  flask_secret_key: "example_flask_secret_key"
+  database_passphrase: "example_database_passphrase"
+  bootstrap_user_manifest: '[{"username": "admin", "password": "example_password"}]'
+  branding_deploy_key: |
+    -----BEGIN OPENSSH PRIVATE KEY-----
+    example_branding_deploy_key
+    -----END OPENSSH PRIVATE KEY-----
 ```
 
 Supported keys:
@@ -437,6 +470,13 @@ Supported keys:
 
 `hosted_domains[].dev.htpasswd_entries` values are credential material and
 belong in encrypted vault files in `grayhaven-vault`.
+
+Supported `timetracker` keys:
+
+- `flask_secret_key`: secret key used by Flask for session signing.
+- `database_passphrase`: passphrase for the SQLCipher database.
+- `bootstrap_user_manifest`: JSON array of bootstrap users for first-time setup.
+- `branding_deploy_key`: private SSH key for accessing the branding repository.
 
 ### Hosted Domain DNS Coordination
 
