@@ -67,6 +67,16 @@ observability:
     enabled: true
     logs_enabled: true
 
+timetracker:
+  hostname: timetracker.example.invalid
+  image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  branding_commit: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+  data_dir: /var/lib/grayhaven/timetracker/data
+  branding_dir: /var/lib/grayhaven/timetracker/branding
+  secrets_dir: /var/lib/grayhaven/timetracker/secrets
+  backup_dir: /var/lib/grayhaven/timetracker/backups
+  backup_retention_days: 14
+
 backupctl_repo_url: https://github.com/dean1012/grayhaven-backupctl.git
 backupctl_repo_ref: main
 backupctl_checkout_dir: /home/ansible/grayhaven-backupctl
@@ -106,6 +116,21 @@ Supported keys:
 - `observability.grafana_cloud.logs_enabled`: optional boolean. When true and
   Grafana Cloud observability is enabled, enables Grafana Cloud log shipping.
   Defaults to false.
+- `timetracker`: required Time Tracker deployment settings. The application is
+  deployed to web hosts; there is no enable flag.
+- `timetracker.hostname`: environment-specific public application hostname.
+- `timetracker.image_digest`: immutable published image digest in
+  `sha256:<64 lowercase hexadecimal characters>` form.
+- `timetracker.branding_commit`: immutable 40-character commit from the public
+  `grayhaven-branding` repository.
+- `timetracker.data_dir`: persistent SQLCipher database directory.
+- `timetracker.branding_dir`: deployed branding asset directory.
+- `timetracker.secrets_dir`: host directory containing application secret
+  files.
+- `timetracker.backup_dir`: directory containing verified encrypted database
+  backup artifacts captured by restic.
+- `timetracker.backup_retention_days`: optional local verified-artifact
+  retention period from 1 through 365 days. Defaults to 14.
 - `backupctl_repo_url`: Git repository URL used by Ansible to install
   `grayhaven-backupctl`. Defaults to
   `https://github.com/dean1012/grayhaven-backupctl.git` if unset.
@@ -403,6 +428,17 @@ Supported keys:
 digitalocean_dns_api_token: "dop_v1_example_dns_token"
 web_deploy_fanout_secret: "example_private_web_deploy_fanout_secret"
 
+timetracker_secrets:
+  flask_secret_key: "example_flask_secret_key_replace_with_at_least_32_characters"
+  sqlcipher_passphrase: "example_sqlcipher_passphrase_replace_with_at_least_32_characters"
+  initial_users:
+    - email: operator@example.invalid
+      first_name: Example
+      last_name: Operator
+      # Hash of example-insecure-password; never use it operationally.
+      password_hash: "$argon2id$v=19$m=65536,t=3,p=4$ZXhhbXBsZS1zYWx0LTAwMDA$tCxgdoL3XKaX1D3RkSeXTMM4zlSl+JB+AGLiY0oSB5U"
+      admin: true
+
 hosted_domains:
   - domain: grayhavensystems.com
     deployment:
@@ -429,6 +465,25 @@ Supported keys:
   private website deployment fanout requests between web hosts. This is required
   when an environment has two or more web hosts behind load-balancer TLS, and it
   must be different from every per-domain GitHub deployment webhook secret.
+- `timetracker_secrets`: required Time Tracker secret material. Keep this
+  mapping separate from the public `timetracker` mapping in `config.yml`.
+- `timetracker_secrets.flask_secret_key`: random Flask signing key containing at
+  least 32 characters.
+- `timetracker_secrets.sqlcipher_passphrase`: random SQLCipher passphrase
+  containing at least 32 characters. Never replace it for an existing database
+  without completing the documented rekey workflow.
+- `timetracker_secrets.initial_users`: non-empty first-install account list. It
+  is used only when the application database contains no users and must include
+  at least one administrator.
+- `timetracker_secrets.initial_users[].email`: account email address.
+- `timetracker_secrets.initial_users[].first_name`: account first name.
+- `timetracker_secrets.initial_users[].last_name`: account last name.
+- `timetracker_secrets.initial_users[].password_hash`: Argon2id password hash
+  meeting the application security parameters.
+- `timetracker_secrets.initial_users[].admin`: boolean selecting administrator
+  or regular-user access.
+- `timetracker_secrets.initial_users[].totp_secret`: optional valid Base32 TOTP
+  secret. Omit it to require in-application TOTP enrollment.
 - `hosted_domains`: list of domains served by
   [`grayhaven-config-ansible`](https://github.com/dean1012/grayhaven-config-ansible).
 - `hosted_domains[].domain`: apex domain name.
