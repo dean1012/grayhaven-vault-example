@@ -11,6 +11,7 @@ are documented in [File Schema](schema.md).
 - [Managing Users](#managing-users)
 - [Managing Operator Tmux Workspaces](#managing-operator-tmux-workspaces)
 - [Generating Password Hashes](#generating-password-hashes)
+- [Managing Time Tracker Credentials and Data](#managing-time-tracker-credentials-and-data)
 - [Generating API Keys](#generating-api-keys)
 - [Rotating Website Deployment Secrets](#rotating-website-deployment-secrets)
 - [Deploy Key](#deploy-key)
@@ -134,6 +135,28 @@ htpasswd -nB username
 
 The `htpasswd` command is provided by the `httpd-tools` package on Red Hat
 distributions.
+
+[Back to top](#operations)
+
+## Managing Time Tracker Credentials and Data
+
+Time Tracker public deployment settings belong in `config.yml` under
+`timetracker`. Credential material belongs in encrypted `vault/web.yml` under
+the separate `timetracker_secrets` mapping.
+
+Generate bootstrap password hashes and optional TOTP secrets with the approved
+published application image. Follow the authoritative
+[Time Tracker configuration documentation](https://github.com/dean1012/grayhaven-timetracker/blob/main/docs/configuration.md)
+rather than reproducing application commands in this repository. Bootstrap
+users are created only for an empty application database and must change their
+initial passwords at first sign-in.
+
+Backup, restore verification, SQLCipher rekey, rollback, and disaster-recovery
+procedures are maintained in the authoritative
+[Time Tracker operations documentation](https://github.com/dean1012/grayhaven-timetracker/blob/main/docs/operations.md).
+Treat the SQLCipher passphrase and encrypted database artifacts as one recovery
+set. Never replace the configured passphrase for an existing database without
+completing that documented workflow.
 
 [Back to top](#operations)
 
