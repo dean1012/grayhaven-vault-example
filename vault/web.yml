@@ -5,6 +5,18 @@
 digitalocean_dns_api_token: "dop_v1_example_dns_token"
 web_deploy_fanout_secret: "example_private_web_deploy_fanout_secret"
 
+timetracker_secrets:
+  flask_secret_key: "example_flask_secret_key_replace_with_at_least_32_characters"
+  sqlcipher_passphrase: "example_sqlcipher_passphrase_replace_with_at_least_32_characters"
+  initial_users:
+    - email: operator@example.invalid
+      first_name: Example
+      last_name: Operator
+      # Hash of the intentionally unsafe example password shown in the docs.
+      password_hash: >-
+        $argon2id$v=19$m=65536,t=3,p=4$ZXhhbXBsZS1zYWx0LTAwMDA$tCxgdoL3XKaX1D3RkSeXTMM4zlSl+JB+AGLiY0oSB5U
+      admin: true
+
 hosted_domains:
   - domain: grayhavensystems.com
     deployment:
