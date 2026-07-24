@@ -70,7 +70,6 @@ observability:
 timetracker:
   hostname: timetracker.example.invalid
   image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  branding_commit: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
   data_dir: /var/lib/grayhaven/timetracker/data
   branding_dir: /var/lib/grayhaven/timetracker/branding
   secrets_dir: /var/lib/grayhaven/timetracker/secrets
@@ -118,11 +117,12 @@ Supported keys:
   Defaults to false.
 - `timetracker`: required Time Tracker deployment settings. The application is
   deployed to web hosts; there is no enable flag.
+- Time Tracker branding is not a vault setting. Deployment automation updates
+  the public `grayhaven-branding` repository's `main` branch on each
+  convergence.
 - `timetracker.hostname`: environment-specific public application hostname.
 - `timetracker.image_digest`: immutable published image digest in
   `sha256:<64 lowercase hexadecimal characters>` form.
-- `timetracker.branding_commit`: immutable 40-character commit from the public
-  `grayhaven-branding` repository.
 - `timetracker.data_dir`: persistent SQLCipher database directory.
 - `timetracker.branding_dir`: deployed branding asset directory.
 - `timetracker.secrets_dir`: host directory containing application secret
