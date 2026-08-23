@@ -179,18 +179,22 @@ Staging may still be inspected through the DigitalOcean metrics dashboard.
 
 ### Backup Operator Utility
 
-Ansible installs
-[`grayhaven-backupctl`](https://github.com/dean1012/grayhaven-backupctl) from
-the repository, ref, and checkout path configured in `config.yml`. If those
-values are unset, the Ansible role defaults to the public
-`grayhaven-backupctl` repository, the `main` branch, and
-`/home/ansible/grayhaven-backupctl`.
+The `grayhaven_backupctl` mapping contains exactly `repo_url`, `checkout_dir`,
+and `version`:
 
-Keep these values pointed at the reviewed production utility unless
-intentionally testing a different branch in a non-production environment. The
-checkout path must be below `/home/ansible` so the managed `ansible` user owns
-the checkout and convergence can safely clean up old checkout locations when
-the configured path changes.
+```yaml
+grayhaven_backupctl:
+  repo_url: https://github.com/dean1012/grayhaven-backupctl.git
+  checkout_dir: /home/ansible/grayhaven-backupctl
+  version: 207a02af4921080efbc46950a14961874952bf92  # v1.0.4
+```
+
+- `grayhaven_backupctl.repo_url`: the reviewed grayhaven-backupctl Git
+  repository.
+- `grayhaven_backupctl.checkout_dir`: the managed checkout path, which must
+  remain below `/home/ansible` so the managed `ansible` user owns it.
+- `grayhaven_backupctl.version`: the full lowercase commit SHA pinned to the
+  verified `v1.0.4` release.
 
 [Back to top](#file-schema)
 
