@@ -76,9 +76,10 @@ timetracker:
   backup_dir: /var/lib/grayhaven/timetracker/backups
   backup_retention_days: 14
 
-backupctl_repo_url: https://github.com/dean1012/grayhaven-backupctl.git
-backupctl_repo_ref: main
-backupctl_checkout_dir: /home/ansible/grayhaven-backupctl
+grayhaven_backupctl:
+  repo_url: https://github.com/dean1012/grayhaven-backupctl.git
+  checkout_dir: /home/ansible/grayhaven-backupctl
+  version: 207a02af4921080efbc46950a14961874952bf92  # v1.0.4
 ```
 
 Supported keys:
@@ -131,14 +132,8 @@ Supported keys:
   backup artifacts captured by restic.
 - `timetracker.backup_retention_days`: optional local verified-artifact
   retention period from 1 through 365 days. Defaults to 14.
-- `backupctl_repo_url`: Git repository URL used by Ansible to install
-  `grayhaven-backupctl`. Defaults to
-  `https://github.com/dean1012/grayhaven-backupctl.git` if unset.
-- `backupctl_repo_ref`: Git ref used by Ansible when checking out
-  `grayhaven-backupctl`. Defaults to `main` if unset.
-- `backupctl_checkout_dir`: local checkout path for `grayhaven-backupctl` on
-  managed hosts. Defaults to `/home/ansible/grayhaven-backupctl` if unset. The
-  checkout path must remain below `/home/ansible`.
+- `grayhaven_backupctl`: backup operator utility settings described in
+  [Backup Operator Utility](#backup-operator-utility).
 
 ### Remote Backup Repository
 
