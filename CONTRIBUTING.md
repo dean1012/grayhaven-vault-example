@@ -36,26 +36,33 @@ npm install --global markdownlint-cli2
 
 ## Workflow
 
+The protected `staging` and `main` branches prohibit direct pushes. Changes must
+be delivered through signed, ready-for-review pull requests, with all review
+conversations resolved and the required check exactly `validate` passing. Only
+squash merges are permitted: merge commits, rebase merges, and bypasses are
+prohibited. Automatic source-branch deletion is disabled, so clean up each
+source branch manually after its pull request is complete.
+
 1. Create a GitHub issue.
 2. Create a focused feature branch for the issue.
 3. Sign all commits and reference the issue number.
 4. Validate changes locally.
-5. Create a pull request for code review.
+5. Create a ready-for-review, non-draft pull request for code review.
 
 Target pull requests according to the environment affected:
 
 - Staging-facing changes target `staging`.
 - Production-only changes target `main`.
-- Changes that should apply to both environments should be validated through a
-  pull request from a branch based on `staging` into `staging` first. To promote
-  the same approved content to `main`, create a fresh branch from `main`,
-  cherry-pick or reapply the staging change, and open that branch against
-  `main`.
+- Changes that should apply to both environments must use separate branches and
+  pull requests: first create a branch from exact `origin/staging`, and land
+  its pull request in `staging`. Then create a fresh branch from exact
+  `origin/main`, reapply the same logical change, and land a separate pull
+  request in `main`.
 
-Do not rely on a direct `staging` to `main` pull request for promotion. The
-long-lived branches are squash merged and can have intentionally different
-history, so a direct branch-to-branch pull request may report conflicts even
-when the file content is already correct.
+Never open a `staging` to `main` pull request or promote by merging `staging`
+into `main`. The long-lived branches are squash merged and can have
+intentionally different history, so a direct branch-to-branch pull request may
+report conflicts even when the file content is already correct.
 
 [Back to top](#contributing)
 
@@ -83,9 +90,14 @@ Pull requests must meet all of these requirements to be merged:
 
 - Reference or close a GitHub issue as appropriate.
 - Contain signed commits.
-- Have no open review conversations.
-- Pass all CI checks.
+- Be ready for review and not be a draft.
+- Have all review conversations resolved.
+- Pass the required `validate` check exactly.
+- Use squash merge only; merge commits, rebase merges, and bypasses are not
+  permitted.
 - Document all changes appropriately.
+- Have the source branch cleaned up manually after completion because automatic
+  branch deletion is disabled.
 
 [Back to top](#contributing)
 
