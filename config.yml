@@ -46,6 +46,7 @@ grayhaven_backupctl:
 
 mcp:
   hostname: mcp.staging.grayhavensystems.com
+  certificate_environment: production
   image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   # Verified OpenSSH known_hosts entries for both environment routes.
   known_hosts: |
