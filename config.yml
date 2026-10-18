@@ -48,7 +48,7 @@ mcp:
   hostname: mcp.staging.grayhavensystems.com
   certificate_environment: production
   image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  # Verified OpenSSH known_hosts entries for both environment routes.
+  # Verified keys for external environment routes; current hosts are derived.
   known_hosts: |
     bastion.example.invalid ssh-ed25519 REPLACE_WITH_VERIFIED_HOST_KEY
   backup_retention_days: 14

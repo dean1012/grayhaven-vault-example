@@ -518,8 +518,9 @@ Environment workspaces own computed runtime DNS records for hosted domains.
 pulls; the token requires `read:packages`.
 
 The `mcp` mapping in `config.yml` requires `hostname`, a pinned
-`image_digest`, and verified `known_hosts` entries for bastion and web in both
-environments. `backup_retention_days` defaults to 14.
+`image_digest`, and verified `known_hosts` entries for external environment
+routes. Ansible derives the current environment's keys from managed host facts.
+`backup_retention_days` defaults to 14.
 `certificate_environment` overrides `certificate.environment` for MCP only;
 use `production` for a certificate trusted by external clients.
 
