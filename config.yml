@@ -43,3 +43,12 @@ grayhaven_backupctl:
   repo_url: https://github.com/dean1012/grayhaven-backupctl.git
   checkout_dir: /home/ansible/grayhaven-backupctl
   version: 207a02af4921080efbc46950a14961874952bf92  # v1.0.4
+
+mcp:
+  hostname: mcp.staging.grayhavensystems.com
+  certificate_environment: production
+  image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  # Verified keys for external environment routes; current hosts are derived.
+  known_hosts: |
+    bastion.example.invalid ssh-ed25519 REPLACE_WITH_VERIFIED_HOST_KEY
+  backup_retention_days: 14

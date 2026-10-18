@@ -1,0 +1,6 @@
+---
+# Example plaintext only. Encrypt this file in the private vault repository.
+mcp_secrets:
+  config_passphrase: "example_encrypted_config_password_replace_before_deployment"
+  registry_username: "example-registry-user"
+  registry_token: "example_read_packages_token_replace_before_deployment"

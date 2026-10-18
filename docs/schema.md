@@ -13,6 +13,7 @@ This document describes the expected files and data shapes for the private
 - [`vault/common.yml`](#vaultcommonyml)
 - [`vault/bastion.yml`](#vaultbastionyml)
 - [`vault/web.yml`](#vaultwebyml)
+- [`vault/mcp.yml`](#vaultmcpyml)
 
 ## Required Files
 
@@ -24,6 +25,7 @@ firewall.yml
 vault/common.yml
 vault/bastion.yml
 vault/web.yml
+vault/mcp.yml
 ```
 
 Infrastructure automation does not provide fallback defaults for missing
@@ -508,3 +510,27 @@ The baseline workspace owns shared DNS zones, mail records, and CAA records.
 Environment workspaces own computed runtime DNS records for hosted domains.
 
 [Back to top](#file-schema)
+
+## `vault/mcp.yml`
+
+`mcp_secrets.config_passphrase` decrypts `config.secrets.enc`.
+`mcp_secrets.registry_username` and `registry_token` authenticate private GHCR
+pulls; the token requires `read:packages`.
+
+The `mcp` mapping in `config.yml` requires `hostname`, a pinned
+`image_digest`, and verified `known_hosts` entries for external environment
+routes. Ansible derives the current environment's keys from managed host facts.
+`backup_retention_days` defaults to 14.
+`certificate_environment` overrides `certificate.environment` for MCP only;
+use `production` for a certificate trusted by external clients.
+
+Ansible owns `/var/lib/grayhaven/mcp`, including configuration, sessions,
+logs, and verified encrypted database snapshots. Session files survive
+convergence. The private image supplies the committed `config.secrets.enc`.
+Its encrypted envelope contains the SSH keys and sudo passwords, Grafana and
+Discord tokens, Notesnook credentials, and SQLCipher passphrase. Do not place
+those plaintext values in `config.yml`.
+
+`firewalls.mcp` permits public HTTPS and SSH from bastion only. It does not
+expose HTTP or public SSH. Encrypt `vault/mcp.yml` in the private vault
+repository.
