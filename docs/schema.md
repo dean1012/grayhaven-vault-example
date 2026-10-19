@@ -515,7 +515,8 @@ Environment workspaces own computed runtime DNS records for hosted domains.
 
 `mcp_secrets.config_passphrase` decrypts `config.secrets.enc`.
 `mcp_secrets.registry_username` and `registry_token` authenticate private GHCR
-pulls; the token requires `read:packages`.
+pulls; the token requires `read:packages`. Write the username as a quoted string,
+for example `registry_username: "username"`.
 
 The `mcp` mapping in `config.yml` requires `hostname`, a pinned
 `image_digest`, `data_dir`, `config_dir`, `secrets_dir`, `sessions_dir`,
