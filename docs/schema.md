@@ -350,6 +350,9 @@ Supported top-level keys:
 - `firewalls.web`: web firewall policy.
 - `firewalls.mcp`: MCP firewall policy.
 
+The `firewalls.mcp.inbound` policy permits public TCP `443` and TCP `22` from
+bastion only. It does not permit HTTP or public SSH.
+
 The `firewalls.web.inbound` policy must include TCP `80` and TCP `443` rules.
 OpenTofu validates this shape before applying the TLS-mode-specific effective
 cloud firewall.
@@ -620,16 +623,27 @@ Environment workspaces own computed runtime DNS records for hosted domains.
 
 ## `vault/mcp.yml`
 
-`mcp_secrets.config_passphrase` decrypts `config.secrets.enc`.
-`mcp_secrets.registry_username` and `registry_token` authenticate private GHCR
-pulls; the token requires `read:packages`. Write the username as a quoted string,
-for example `registry_username: "username"`.
+`vault/mcp.yml` stores the MCP configuration decryption password and private
+container registry credentials.
 
-The private image supplies the committed `config.secrets.enc`.
-Its encrypted envelope contains the SSH keys and sudo passwords, Grafana and
-Discord tokens, Notesnook credentials, and SQLCipher passphrase. Do not place
-those plaintext values in `config.yml`.
+```yaml
+---
+# Example plaintext only. Encrypt this file in the private vault repository.
+mcp_secrets:
+  config_passphrase: "example_encrypted_config_password_replace_before_deployment"
+  registry_username: "username"
+  registry_token: "example_read_packages_token_replace_before_deployment"
+```
 
-`firewalls.mcp` permits public HTTPS and SSH from bastion only. It does not
-expose HTTP or public SSH. Encrypt `vault/mcp.yml` in the private vault
-repository.
+Supported keys:
+
+- `mcp_secrets.config_passphrase`: password used to decrypt
+  `config.secrets.enc`.
+- `mcp_secrets.registry_username`: GitHub username used for private GHCR pulls.
+  Write the username as a quoted string, for example `"username"`.
+- `mcp_secrets.registry_token`: GitHub personal access token used for private
+  GHCR pulls. The token requires `read:packages`.
+
+Encrypt `vault/mcp.yml` in the private vault repository.
+
+[Back to top](#file-schema)
