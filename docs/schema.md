@@ -200,6 +200,7 @@ grayhaven_backupctl:
 `firewall.yml` is plaintext and is read by OpenTofu and Ansible.
 
 ```yaml
+---
 firewalls:
   bastion:
     inbound:
@@ -209,6 +210,16 @@ firewalls:
           - 0.0.0.0/0
     outbound:
       - protocol: tcp
+        port_range: "22"
+        destination_tags:
+          - bastion
+          - web
+      # Bastions clone private GitHub repositories with SSH deploy keys.
+      - protocol: tcp
+        port_range: "22"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
         port_range: "80"
         destination_addresses:
           - 0.0.0.0/0
@@ -216,9 +227,25 @@ firewalls:
         port_range: "443"
         destination_addresses:
           - 0.0.0.0/0
+      - protocol: udp
+        port_range: "53"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
+        port_range: "53"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: udp
+        port_range: "123"
+        destination_addresses:
+          - 0.0.0.0/0
 
   web:
     inbound:
+      - protocol: tcp
+        port_range: "22"
+        source_tags:
+          - bastion
       - protocol: tcp
         port_range: "80"
         source_addresses:
@@ -236,12 +263,61 @@ firewalls:
         port_range: "443"
         destination_addresses:
           - 0.0.0.0/0
+      - protocol: udp
+        port_range: "53"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
+        port_range: "53"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: udp
+        port_range: "123"
+        destination_addresses:
+          - 0.0.0.0/0
+
+  mcp:
+    inbound:
+      - protocol: tcp
+        port_range: "22"
+        source_tags:
+          - bastion
+      - protocol: tcp
+        port_range: "443"
+        source_addresses:
+          - 0.0.0.0/0
+    outbound:
+      - protocol: tcp
+        port_range: "22"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
+        port_range: "80"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
+        port_range: "443"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: udp
+        port_range: "53"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
+        port_range: "53"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: udp
+        port_range: "123"
+        destination_addresses:
+          - 0.0.0.0/0
 ```
 
 Supported top-level keys:
 
 - `firewalls.bastion`: bastion firewall policy.
 - `firewalls.web`: web firewall policy.
+- `firewalls.mcp`: MCP firewall policy.
 
 The `firewalls.web.inbound` policy must include TCP `80` and TCP `443` rules.
 OpenTofu validates this shape before applying the TLS-mode-specific effective
