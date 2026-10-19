@@ -522,8 +522,8 @@ The `mcp` mapping in `config.yml` requires `hostname`, a pinned
 `logs_dir`, and `backup_dir`. Ansible binds SSH to the deployed environment
 and derives its host keys from managed inventory facts.
 `backup_retention_days` defaults to 14.
-`certificate_environment` overrides `certificate.environment` for MCP only;
-use `production` for a certificate trusted by external clients.
+MCP always uses a production certificate trusted by external clients,
+including in staging. The global certificate setting applies to other servers.
 
 Ansible owns the configured directories, including configuration, sessions,
 logs, and verified encrypted database snapshots. Session files survive
