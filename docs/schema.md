@@ -641,6 +641,4 @@ Supported keys:
 - `mcp_secrets.registry_token`: GitHub personal access token used for private
   GHCR pulls. The token requires `read:packages`.
 
-Encrypt `vault/mcp.yml` in the private vault repository.
-
 [Back to top](#file-schema)
