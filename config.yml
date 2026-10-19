@@ -28,7 +28,7 @@ observability:
 
 timetracker:
   hostname: timetracker.staging.grayhavensystems.com
-  image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  # build/1.0.0
+  image_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"  # build/1.0.0
   data_dir: /var/lib/grayhaven/timetracker/data
   branding_dir: /var/lib/grayhaven/timetracker/branding
   secrets_dir: /var/lib/grayhaven/timetracker/secrets
