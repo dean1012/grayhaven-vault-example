@@ -46,7 +46,6 @@ grayhaven_backupctl:
 
 mcp:
   hostname: mcp.staging.grayhavensystems.com
-  certificate_environment: production
   image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  # build/1.0.0
   data_dir: /var/lib/grayhaven/mcp/data
   config_dir: /var/lib/grayhaven/mcp/config
