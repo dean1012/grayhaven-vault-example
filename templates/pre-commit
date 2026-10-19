@@ -5,6 +5,7 @@ required_vault_files=(
   "vault/common.yml"
   "vault/bastion.yml"
   "vault/web.yml"
+  "vault/mcp.yml"
 )
 
 failures=()
