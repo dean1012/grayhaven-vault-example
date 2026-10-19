@@ -149,7 +149,7 @@ Supported keys:
 - `mcp.hostname`: environment-specific public MCP hostname.
 - `mcp.image_digest`: immutable published image digest in
   `sha256:<64 lowercase hexadecimal characters>` form, followed by the
-  matching `  # build/X.Y.Z` comment.
+  matching `# build/X.Y.Z` comment, separated by two spaces.
 - `mcp.data_dir`: persistent SQLCipher database directory.
 - `mcp.config_dir`: directory containing public and encrypted configuration.
 - `mcp.secrets_dir`: directory containing the configuration decryption password.
