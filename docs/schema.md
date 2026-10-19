@@ -41,10 +41,11 @@ Infrastructure automation does not provide fallback defaults for missing
 certificate:
   environment: staging
   email: admin@example.com
-discord_webhook: testing
 
 network:
   vpc_cidr: 10.20.0.0/16
+
+discord_webhook: testing
 
 backup:
   repositories:
