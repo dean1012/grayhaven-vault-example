@@ -162,10 +162,7 @@ Supported keys:
   from 1 through 365 days. Defaults to 14.
 
 MCP always uses a production certificate trusted by external clients, including
-in staging. The global certificate setting applies to other servers. Ansible
-binds SSH to the deployed environment and derives its host keys from managed
-inventory facts. The encrypted MCP deployment credentials are described under
-[`vault/mcp.yml`](#vaultmcpyml).
+in staging. The global certificate setting applies to other servers.
 
 ### Remote Backup Repository
 
