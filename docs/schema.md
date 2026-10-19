@@ -518,13 +518,14 @@ Environment workspaces own computed runtime DNS records for hosted domains.
 pulls; the token requires `read:packages`.
 
 The `mcp` mapping in `config.yml` requires `hostname`, a pinned
-`image_digest`, and verified `known_hosts` entries for external environment
-routes. Ansible derives the current environment's keys from managed host facts.
+`image_digest`, `data_dir`, `config_dir`, `secrets_dir`, `sessions_dir`,
+`logs_dir`, and `backup_dir`. Ansible binds SSH to the deployed environment
+and derives its host keys from managed inventory facts.
 `backup_retention_days` defaults to 14.
 `certificate_environment` overrides `certificate.environment` for MCP only;
 use `production` for a certificate trusted by external clients.
 
-Ansible owns `/var/lib/grayhaven/mcp`, including configuration, sessions,
+Ansible owns the configured directories, including configuration, sessions,
 logs, and verified encrypted database snapshots. Session files survive
 convergence. The private image supplies the committed `config.secrets.enc`.
 Its encrypted envelope contains the SSH keys and sudo passwords, Grafana and

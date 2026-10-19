@@ -47,8 +47,11 @@ grayhaven_backupctl:
 mcp:
   hostname: mcp.staging.grayhavensystems.com
   certificate_environment: production
-  image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  # Verified keys for external environment routes; current hosts are derived.
-  known_hosts: |
-    bastion.example.invalid ssh-ed25519 REPLACE_WITH_VERIFIED_HOST_KEY
+  image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  # build/1.0.0
+  data_dir: /var/lib/grayhaven/mcp/data
+  config_dir: /var/lib/grayhaven/mcp/config
+  secrets_dir: /var/lib/grayhaven/mcp/secrets
+  sessions_dir: /var/lib/grayhaven/mcp/sessions
+  logs_dir: /var/lib/grayhaven/mcp/logs
+  backup_dir: /var/lib/grayhaven/mcp/backups
   backup_retention_days: 14
