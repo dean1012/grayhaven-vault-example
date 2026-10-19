@@ -2,21 +2,17 @@
 certificate:
   environment: staging
   email: admin@example.com
-discord_webhook: testing
 
 network:
   vpc_cidr: 10.20.0.0/16
+
+discord_webhook: testing
 
 backup:
   repositories:
     local:
       repository_path: /var/backups/restic
       homedir_archive_path: /var/backups/deleted-homedir-archives
-    remote:
-      provider: gcs
-      project_id: grayhaven
-      location: US
-      storage_class: STANDARD
   schedule: daily
   retention:
     keep_daily: 7
@@ -32,7 +28,7 @@ observability:
 
 timetracker:
   hostname: timetracker.staging.grayhavensystems.com
-  image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  # build/1.0.0
+  image_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"  # build/1.0.0
   data_dir: /var/lib/grayhaven/timetracker/data
   branding_dir: /var/lib/grayhaven/timetracker/branding
   secrets_dir: /var/lib/grayhaven/timetracker/secrets

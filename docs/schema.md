@@ -41,21 +41,17 @@ Infrastructure automation does not provide fallback defaults for missing
 certificate:
   environment: staging
   email: admin@example.com
-discord_webhook: testing
 
 network:
   vpc_cidr: 10.20.0.0/16
+
+discord_webhook: testing
 
 backup:
   repositories:
     local:
       repository_path: /var/backups/restic
       homedir_archive_path: /var/backups/deleted-homedir-archives
-    remote:
-      provider: gcs
-      project_id: grayhaven
-      location: US
-      storage_class: STANDARD
   schedule: daily
   retention:
     keep_daily: 7
@@ -71,7 +67,7 @@ observability:
 
 timetracker:
   hostname: timetracker.example.invalid
-  image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  image_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   data_dir: /var/lib/grayhaven/timetracker/data
   branding_dir: /var/lib/grayhaven/timetracker/branding
   secrets_dir: /var/lib/grayhaven/timetracker/secrets
@@ -97,7 +93,8 @@ Supported keys:
 - `backup.repositories.local.homedir_archive_path`: local path for removed user
   home directory archives.
 - `backup.repositories.remote`: optional remote restic repository settings.
-  Only Google Cloud Storage is supported at this time.
+  Supported only in production; omit this mapping in staging. Only Google Cloud
+  Storage is supported at this time.
 - `backup.repositories.remote.provider`: remote repository provider. The
   supported value is `gcs`.
 - `backup.repositories.remote.project_id`: Google Cloud project ID.
@@ -139,7 +136,8 @@ Supported keys:
 
 ### Remote Backup Repository
 
-Remote restic repositories are optional. When enabled, Ansible creates one
+Remote restic repositories are supported only in production. Staging uses local
+backups only. When enabled, Ansible creates one
 Google Cloud Storage bucket per managed host before configuring restic. Bucket
 names use the short hostname with `-restic` appended.
 
