@@ -38,6 +38,7 @@ Infrastructure automation does not provide fallback defaults for missing
 `config.yml` is plaintext and is read by both OpenTofu and Ansible.
 
 ```yaml
+---
 certificate:
   environment: staging
   email: admin@example.com
@@ -66,8 +67,8 @@ observability:
     logs_enabled: false
 
 timetracker:
-  hostname: timetracker.example.invalid
-  image_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  hostname: timetracker.staging.grayhavensystems.com
+  image_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"  # build/1.0.0
   data_dir: /var/lib/grayhaven/timetracker/data
   branding_dir: /var/lib/grayhaven/timetracker/branding
   secrets_dir: /var/lib/grayhaven/timetracker/secrets
@@ -78,6 +79,17 @@ grayhaven_backupctl:
   repo_url: https://github.com/dean1012/grayhaven-backupctl.git
   checkout_dir: /home/ansible/grayhaven-backupctl
   version: 207a02af4921080efbc46950a14961874952bf92  # v1.0.4
+
+mcp:
+  hostname: mcp.staging.grayhavensystems.com
+  image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  # build/1.0.0
+  data_dir: /var/lib/grayhaven/mcp/data
+  config_dir: /var/lib/grayhaven/mcp/config
+  secrets_dir: /var/lib/grayhaven/mcp/secrets
+  sessions_dir: /var/lib/grayhaven/mcp/sessions
+  logs_dir: /var/lib/grayhaven/mcp/logs
+  backup_dir: /var/lib/grayhaven/mcp/backups
+  backup_retention_days: 14
 ```
 
 Supported keys:
@@ -133,6 +145,27 @@ Supported keys:
   retention period from 1 through 365 days. Defaults to 14.
 - `grayhaven_backupctl`: backup operator utility settings described in
   [Backup Operator Utility](#backup-operator-utility).
+- `mcp`: deployment settings required when an MCP host is provisioned.
+- `mcp.hostname`: environment-specific public MCP hostname.
+- `mcp.image_digest`: immutable published image digest in
+  `sha256:<64 lowercase hexadecimal characters>` form, followed by the
+  matching `  # build/X.Y.Z` comment.
+- `mcp.data_dir`: persistent SQLCipher database directory.
+- `mcp.config_dir`: directory containing public and encrypted configuration.
+- `mcp.secrets_dir`: directory containing the configuration decryption password.
+- `mcp.sessions_dir`: persistent provider-session directory. Convergence preserves
+  existing sessions.
+- `mcp.logs_dir`: directory containing Systems notification error logs.
+- `mcp.backup_dir`: directory containing verified encrypted database snapshots
+  included automatically in host backups.
+- `mcp.backup_retention_days`: optional local verified-artifact retention period
+  from 1 through 365 days. Defaults to 14.
+
+MCP always uses a production certificate trusted by external clients, including
+in staging. The global certificate setting applies to other servers. Ansible
+binds SSH to the deployed environment and derives its host keys from managed
+inventory facts. The encrypted MCP deployment credentials are described under
+[`vault/mcp.yml`](#vaultmcpyml).
 
 ### Remote Backup Repository
 
@@ -592,17 +625,7 @@ Environment workspaces own computed runtime DNS records for hosted domains.
 pulls; the token requires `read:packages`. Write the username as a quoted string,
 for example `registry_username: "username"`.
 
-The `mcp` mapping in `config.yml` requires `hostname`, a pinned
-`image_digest`, `data_dir`, `config_dir`, `secrets_dir`, `sessions_dir`,
-`logs_dir`, and `backup_dir`. Ansible binds SSH to the deployed environment
-and derives its host keys from managed inventory facts.
-`backup_retention_days` defaults to 14.
-MCP always uses a production certificate trusted by external clients,
-including in staging. The global certificate setting applies to other servers.
-
-Ansible owns the configured directories, including configuration, sessions,
-logs, and verified encrypted database snapshots. Session files survive
-convergence. The private image supplies the committed `config.secrets.enc`.
+The private image supplies the committed `config.secrets.enc`.
 Its encrypted envelope contains the SSH keys and sudo passwords, Grafana and
 Discord tokens, Notesnook credentials, and SQLCipher passphrase. Do not place
 those plaintext values in `config.yml`.
