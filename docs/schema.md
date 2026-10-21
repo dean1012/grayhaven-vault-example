@@ -13,6 +13,7 @@ This document describes the expected files and data shapes for the private
 - [`vault/common.yml`](#vaultcommonyml)
 - [`vault/bastion.yml`](#vaultbastionyml)
 - [`vault/web.yml`](#vaultwebyml)
+- [`vault/mcp.yml`](#vaultmcpyml)
 
 ## Required Files
 
@@ -24,6 +25,7 @@ firewall.yml
 vault/common.yml
 vault/bastion.yml
 vault/web.yml
+vault/mcp.yml
 ```
 
 Infrastructure automation does not provide fallback defaults for missing
@@ -36,13 +38,15 @@ Infrastructure automation does not provide fallback defaults for missing
 `config.yml` is plaintext and is read by both OpenTofu and Ansible.
 
 ```yaml
+---
 certificate:
-  environment: staging
+  environment: production
   email: admin@example.com
-discord_webhook: testing
 
 network:
-  vpc_cidr: 10.20.0.0/16
+  vpc_cidr: 10.30.0.0/16
+
+discord_webhook: production
 
 backup:
   repositories:
@@ -68,8 +72,8 @@ observability:
     logs_enabled: true
 
 timetracker:
-  hostname: timetracker.example.invalid
-  image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  hostname: timetracker.grayhavensystems.com
+  image_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"  # build/1.0.0
   data_dir: /var/lib/grayhaven/timetracker/data
   branding_dir: /var/lib/grayhaven/timetracker/branding
   secrets_dir: /var/lib/grayhaven/timetracker/secrets
@@ -79,7 +83,17 @@ timetracker:
 grayhaven_backupctl:
   repo_url: https://github.com/dean1012/grayhaven-backupctl.git
   checkout_dir: /home/ansible/grayhaven-backupctl
-  version: 207a02af4921080efbc46950a14961874952bf92  # v1.0.4
+  version: "207a02af4921080efbc46950a14961874952bf92"  # v1.0.4
+
+mcp:
+  hostname: mcp.grayhavensystems.com
+  image_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"  # build/1.0.0
+  data_dir: /var/lib/grayhaven/mcp/data
+  config_dir: /var/lib/grayhaven/mcp/config
+  secrets_dir: /var/lib/grayhaven/mcp/secrets
+  sessions_dir: /var/lib/grayhaven/mcp/sessions
+  backup_dir: /var/lib/grayhaven/mcp/backups
+  backup_retention_days: 14
 ```
 
 Supported keys:
@@ -135,6 +149,24 @@ Supported keys:
 - `grayhaven_backupctl`: backup operator utility settings described in
   [Backup Operator Utility](#backup-operator-utility).
 
+- `mcp`: deployment settings required when an MCP host is provisioned.
+- `mcp.hostname`: environment-specific public MCP hostname.
+- `mcp.image_digest`: immutable published image digest in
+  `sha256:<64 lowercase hexadecimal characters>` form, followed by the
+  matching `# build/X.Y.Z` comment, separated by two spaces.
+- `mcp.data_dir`: persistent SQLCipher database directory.
+- `mcp.config_dir`: directory containing public and encrypted configuration.
+- `mcp.secrets_dir`: directory containing the configuration decryption password.
+- `mcp.sessions_dir`: persistent provider-session directory. Convergence preserves
+  existing sessions.
+- `mcp.backup_dir`: directory containing verified encrypted database snapshots
+  included automatically in host backups.
+- `mcp.backup_retention_days`: optional local verified-artifact retention period
+  from 1 through 365 days. Defaults to 14.
+
+MCP always uses a production certificate trusted by external clients, including
+in staging. The global certificate setting applies to other servers.
+
 ### Remote Backup Repository
 
 Remote restic repositories are optional. When enabled, Ansible creates one
@@ -184,7 +216,7 @@ and `version`:
 grayhaven_backupctl:
   repo_url: https://github.com/dean1012/grayhaven-backupctl.git
   checkout_dir: /home/ansible/grayhaven-backupctl
-  version: 207a02af4921080efbc46950a14961874952bf92  # v1.0.4
+  version: "207a02af4921080efbc46950a14961874952bf92"  # v1.0.4
 ```
 
 - `grayhaven_backupctl.repo_url`: the reviewed grayhaven-backupctl Git
@@ -201,6 +233,7 @@ grayhaven_backupctl:
 `firewall.yml` is plaintext and is read by OpenTofu and Ansible.
 
 ```yaml
+---
 firewalls:
   bastion:
     inbound:
@@ -210,6 +243,16 @@ firewalls:
           - 0.0.0.0/0
     outbound:
       - protocol: tcp
+        port_range: "22"
+        destination_tags:
+          - bastion
+          - web
+      # Bastions clone private GitHub repositories with SSH deploy keys.
+      - protocol: tcp
+        port_range: "22"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
         port_range: "80"
         destination_addresses:
           - 0.0.0.0/0
@@ -217,9 +260,25 @@ firewalls:
         port_range: "443"
         destination_addresses:
           - 0.0.0.0/0
+      - protocol: udp
+        port_range: "53"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
+        port_range: "53"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: udp
+        port_range: "123"
+        destination_addresses:
+          - 0.0.0.0/0
 
   web:
     inbound:
+      - protocol: tcp
+        port_range: "22"
+        source_tags:
+          - bastion
       - protocol: tcp
         port_range: "80"
         source_addresses:
@@ -237,12 +296,65 @@ firewalls:
         port_range: "443"
         destination_addresses:
           - 0.0.0.0/0
+      - protocol: udp
+        port_range: "53"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
+        port_range: "53"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: udp
+        port_range: "123"
+        destination_addresses:
+          - 0.0.0.0/0
+
+  mcp:
+    inbound:
+      - protocol: tcp
+        port_range: "22"
+        source_tags:
+          - bastion
+      - protocol: tcp
+        port_range: "443"
+        source_addresses:
+          - 0.0.0.0/0
+    outbound:
+      - protocol: tcp
+        port_range: "22"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
+        port_range: "80"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
+        port_range: "443"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: udp
+        port_range: "53"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: tcp
+        port_range: "53"
+        destination_addresses:
+          - 0.0.0.0/0
+      - protocol: udp
+        port_range: "123"
+        destination_addresses:
+          - 0.0.0.0/0
 ```
 
 Supported top-level keys:
 
 - `firewalls.bastion`: bastion firewall policy.
 - `firewalls.web`: web firewall policy.
+
+- `firewalls.mcp`: MCP firewall policy.
+
+The `firewalls.mcp.inbound` policy permits public TCP `443` and TCP `22` from
+bastion only. It does not permit HTTP or public SSH.
 
 The `firewalls.web.inbound` policy must include TCP `80` and TCP `443` rules.
 OpenTofu validates this shape before applying the TLS-mode-specific effective
@@ -530,5 +642,30 @@ For hosted web domains, set both `environment.apex: true` and
 
 The baseline workspace owns shared DNS zones, mail records, and CAA records.
 Environment workspaces own computed runtime DNS records for hosted domains.
+
+[Back to top](#file-schema)
+
+## `vault/mcp.yml`
+
+`vault/mcp.yml` stores the MCP configuration decryption password and private
+container registry credentials.
+
+```yaml
+---
+# Example plaintext only. Encrypt this file in the private vault repository.
+mcp_secrets:
+  config_passphrase: "example_encrypted_config_password_replace_before_deployment"
+  registry_username: "username"
+  registry_token: "example_read_packages_token_replace_before_deployment"
+```
+
+Supported keys:
+
+- `mcp_secrets.config_passphrase`: password used to decrypt
+  `config.secrets.enc`.
+- `mcp_secrets.registry_username`: GitHub username used for private GHCR pulls.
+  Write the username as a quoted string, for example `"username"`.
+- `mcp_secrets.registry_token`: GitHub personal access token used for private
+  GHCR pulls. The token requires `read:packages`.
 
 [Back to top](#file-schema)

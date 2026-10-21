@@ -1,11 +1,12 @@
 ---
 certificate:
-  environment: staging
+  environment: production
   email: admin@example.com
-discord_webhook: testing
 
 network:
   vpc_cidr: 10.30.0.0/16
+
+discord_webhook: production
 
 backup:
   repositories:
@@ -32,7 +33,7 @@ observability:
 
 timetracker:
   hostname: timetracker.grayhavensystems.com
-  image_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  image_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"  # build/1.0.0
   data_dir: /var/lib/grayhaven/timetracker/data
   branding_dir: /var/lib/grayhaven/timetracker/branding
   secrets_dir: /var/lib/grayhaven/timetracker/secrets
@@ -42,4 +43,14 @@ timetracker:
 grayhaven_backupctl:
   repo_url: https://github.com/dean1012/grayhaven-backupctl.git
   checkout_dir: /home/ansible/grayhaven-backupctl
-  version: 207a02af4921080efbc46950a14961874952bf92  # v1.0.4
+  version: "207a02af4921080efbc46950a14961874952bf92"  # v1.0.4
+
+mcp:
+  hostname: mcp.grayhavensystems.com
+  image_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"  # build/1.0.0
+  data_dir: /var/lib/grayhaven/mcp/data
+  config_dir: /var/lib/grayhaven/mcp/config
+  secrets_dir: /var/lib/grayhaven/mcp/secrets
+  sessions_dir: /var/lib/grayhaven/mcp/sessions
+  backup_dir: /var/lib/grayhaven/mcp/backups
+  backup_retention_days: 14
