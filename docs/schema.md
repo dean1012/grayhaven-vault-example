@@ -87,7 +87,6 @@ mcp:
   config_dir: /var/lib/grayhaven/mcp/config
   secrets_dir: /var/lib/grayhaven/mcp/secrets
   sessions_dir: /var/lib/grayhaven/mcp/sessions
-  logs_dir: /var/lib/grayhaven/mcp/logs
   backup_dir: /var/lib/grayhaven/mcp/backups
   backup_retention_days: 14
 ```
@@ -155,7 +154,6 @@ Supported keys:
 - `mcp.secrets_dir`: directory containing the configuration decryption password.
 - `mcp.sessions_dir`: persistent provider-session directory. Convergence preserves
   existing sessions.
-- `mcp.logs_dir`: directory containing Systems notification error logs.
 - `mcp.backup_dir`: directory containing verified encrypted database snapshots
   included automatically in host backups.
 - `mcp.backup_retention_days`: optional local verified-artifact retention period
